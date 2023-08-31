@@ -1,0 +1,106 @@
+QWidget {
+  font-size: 18px;
+  }
+
+QWidget#main {
+    background-color: #ffffff;
+}
+
+QLineEdit#status {
+  font-size: 16px;
+  background: #e6e6e6;
+  }
+
+QLabel#bar_status {
+  font-size: 16px;
+  background: #e6e6e6;
+  }
+
+ QWidget#status_container {
+    background-color: #e6e6e6;
+}
+
+QMessageBox{
+    background-color: #e6e6e6;
+}
+
+QWidget#main_buttons{
+    background: #e6e6e6;
+}
+
+QPushButton {
+  background-color: white;
+  border-style: solid;
+  border-color: #505050;
+  border-width: 1px;
+  border-radius: 6px;
+  padding-top: 4px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 4px;
+  }
+
+ QPushButton::hover {
+    border-color: black;
+    background-color: rgb(235, 235, 235);
+ }
+
+ QPushButton::pressed {
+    background-color: rgb(200, 200, 200);
+ }
+
+ QPushButton::disabled {
+    color: rgb(150, 150, 150);
+    border-color: rgb(150, 150, 150);
+ }
+
+ QPushButton#details{
+    font: bold;
+ }
+
+QTabWidget::pane {
+  background-color: #e6e6e6;
+  border: 0px solid #e6e6e6;
+  margin-bottom: 0px;
+  }
+
+QTabWidget::tab-bar {
+  left: 3px;
+  }
+
+QTabBar::tab:selected {
+  background: #e6e6e6;
+  }
+
+QTabBar::tab {
+  border: 1px solid #a0a0aa;
+  border-bottom-color: #e6e6e6;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  padding-left: 12px;
+  padding-right: 12px;
+  }
+
+QTableWidget {
+  alternate-background-color: rgb(230, 230, 230);
+  }
+
+PersOrgEdit{
+    background-color: #e6e6e6;
+ }
+
+HideRecord{
+    background-color: #e6e6e6;
+ }
+
+ ImportExport{
+    background-color: #e6e6e6;
+ }
+
+MyComboBox{
+    background-color: #ffffff;
+    border:2px solid #e6e6e6;
+
+}
+
+

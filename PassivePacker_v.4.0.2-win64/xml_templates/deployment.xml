@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ns1:Deployment xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xmlns:ns1="http://tethys.sdsu.edu/schema/" xmlns:xlink="http://www.w3.org/1999/xlink"
+                xsi:schemaLocation="http://tethys.sdsu.edu/schema/Deployment.xsd">
+    <Project>{{PROJECT_NAME}}</Project>
+    <DeploymentID>{{DEPLOYMENT_NAME}}</DeploymentID>
+    <DeploymentAlias>{{DEPLOYMENT_ALIAS}}</DeploymentAlias>
+    {% if SITE %}
+    <Site>{{SITE}}</Site>
+    {% elif CRUISE %}
+    <Cruise>{{CRUISE}}</Cruise>
+    {% endif %}
+    {% if SITE_ALIASES %}
+    <SiteAliases>
+        {% for alias in SITE_ALIASES %}
+        <Site>{{alias}}</Site>
+        {% endfor %}
+    </SiteAliases>
+    {% endif %}
+    <Platform>{{PLATFORM_NAME}}</Platform>
+    <Region>{{DEPLOYMENT.SEA_AREA}}</Region>
+    <Instrument>
+        <Type>{{INSTRUMENT_TYPE}}</Type>
+        <ID>{{INSTRUMENT_ID}}</ID>
+    </Instrument>
+    {% if CHANNELS %}
+    <SamplingDetails>
+      {% for current_channel in CHANNELS %}
+      {% set channel = CHANNELS[current_channel] %}
+        <Channel>
+            <ChannelNumber>{{current_channel}}</ChannelNumber>
+            <SensorNumber>{{channel.SENSOR}}</SensorNumber>
+            <Start>{{channel.CHANNEL_START}}</Start>
+            <End>{{channel.CHANNEL_END}}</End>
+           {% for sampling in channel.SAMPLING_DETAILS.SAMPLING%}
+            <Sampling>
+                <Regimen>
+                    <TimeStamp>{{sampling.START}}</TimeStamp>
+                    {% if sampling.SAMPLE_RATE %}
+                    <SampleRate_kHz>{{sampling
+                        .SAMPLE_RATE}}</SampleRate_kHz>
+                    {% endif %}
+                    {% if sampling.SAMPLE_BITS %}
+                    <SampleBits>{{sampling.SAMPLE_BITS}}</SampleBits>
+                    {% endif %}
+                </Regimen>
+            </Sampling>
+            {% endfor %}
+            {% for gain in channel.SAMPLING_DETAILS.GAIN %}
+            <Gain>
+                <Regimen>
+                    <TimeStamp>{{gain.START}}</TimeStamp>
+                    {% if gain.GAIN_dB %}
+                    <Gain_dB>{{gain.GAIN_dB}}</Gain_dB>
+                    {% elif gain.GAIN_REL %}
+                    <Gain_rel>{{gain.GAIN_REL}}</Gain_rel>
+                    {% endif %}
+                </Regimen>
+            </Gain>
+            {% endfor %}
+            {% for cycle in channel.SAMPLING_DETAILS.DUTY_CYCLE %}
+            <DutyCycle>
+                <Regimen>
+                    <TimeStamp>{{cycle.START}}</TimeStamp>
+                    <RecordingDuration_m>{{cycle
+                        .DURATION}}</RecordingDuration_m>
+                    <RecordingInterval_m>{{cycle
+                        .INTERVAL}}</RecordingInterval_m>
+                </Regimen>
+            </DutyCycle>
+            {% endfor %}
+        </Channel>
+        {% endfor %}
+    </SamplingDetails>
+    {% endif %}
+    {% if QUALITY_DETAILS %}
+    <QualityAssurance>
+        <Description>
+            <Objectives>{{QUALITY_DETAILS.objectives}}</Objectives>
+            <Abstract>{{QUALITY_DETAILS.abstract}}</Abstract>
+            <Method>{{QUALITY_DETAILS.method}}</Method>
+        </Description>
+        <ResponsibleParty
+                xlink:title="{{QUALITY_DETAILS.analyst}}"
+                xlink:href="http://www.ngdc.noaa.gov/docucomp/{{QUALITY_DETAILS.analyst_uuid}}"/>
+        {% for entry in QUALITY_DETAILS.quality_details %}
+        <Quality>
+            <Start>{{entry.start}}</Start>
+            <End>{{entry.end}}</End>
+            <Category>{{entry.quality}}</Category>
+            <FrequencyRange>
+                <Low_Hz>{{entry.low_freq}}</Low_Hz>
+                <High_Hz>{{entry.high_freq}}</High_Hz>
+            </FrequencyRange>
+            <Channel>{{entry.channels}}</Channel>
+            <Comment>{{entry.comments}}</Comment>
+        </Quality>
+        {% endfor %}
+    </QualityAssurance>
+    {% endif %}
+    {% if DATA %}
+    <Data>
+        <Audio>
+            <URI> </URI>
+            <Processed> </Processed>
+            <Raw> </Raw>
+        </Audio>
+        <Track>
+            <Points>
+                <Trackline> </Trackline>
+                <Point>
+                    <TimeStamp> </TimeStamp>
+                    <Longitude> </Longitude>
+                    <Latitude> </Latitude>
+                    <Bearing_DegN north="magnetic"> </Bearing_DegN>
+                    <Speed_kn> </Speed_kn>
+                    <Pitch_deg> </Pitch_deg>
+                    <Roll_deg> </Roll_deg>
+                    <Depth_m> </Depth_m>
+                    <BottomDepth_m> </BottomDepth_m>
+                </Point>
+            </Points>
+            <TrackEffort>
+                <OnPath>
+                    <Trackline> </Trackline>
+                    <Start> </Start>
+                    <End> </End>
+                    <Comment> </Comment>
+                </OnPath>
+            </TrackEffort>
+            <URI> </URI>
+        </Track>
+    </Data>
+    {% endif %}
+    {% if DEPLOYMENT %}
+    <DeploymentDetails>
+        <Longitude>{{DEPLOYMENT.DEPLOY_LON}}</Longitude>
+        <Latitude>{{DEPLOYMENT.DEPLOY_LAT}}</Latitude>
+        <DepthInstrument_m>{{DEPLOYMENT.DEPLOY_INSTRUMENT_DEPTH}}</DepthInstrument_m>
+        <DepthBottom_m>{{DEPLOYMENT.DEPLOY_BOTTOM_DEPTH}}</DepthBottom_m>
+        <TimeStamp>{{DEPLOYMENT.DEPLOYMENT_TIME}}</TimeStamp>
+        <AudioTimeStamp>{{DEPLOYMENT.AUDIO_START}}</AudioTimeStamp>
+        <Vessel>{{DEPLOYMENT.DEPLOY_SHIP}}</Vessel>
+        {% for PERSON in DEPLOYMENT.SCIENTISTS %}
+        <ResponsibleParty>
+            <individualName>{{PERSON.NAME}}</individualName>
+            <organizationName>{{PERSON
+                .ORGANIZATION}}</organizationName>
+            <positionName>{{PERSON.POSITION}}</positionName>
+            <contactInfo>
+                <phone>
+                    <voice>{{PERSON.PHONE}}</voice>
+                </phone>
+                <address>
+                    {% for STREET in PERSON.STREET %}
+                    <deliveryPoint>{{STREET}}</deliveryPoint>
+                    {% endfor %}
+                    <city>{{PERSON.CITY}}</city>
+                    <administrativeArea>{{PERSON
+                        .STATE}}</administrativeArea>
+                    <postalCode>{{PERSON.ZIP}}</postalCode>
+                    <country>{{PERSON.COUNTRY}}</country>
+                    <electronicMailAddress>{{PERSON
+                        .EMAIL}}</electronicMailAddress>
+                </address>
+            </contactInfo>
+        </ResponsibleParty>
+        {% endfor %}
+    </DeploymentDetails>
+    {% endif %}
+    {% if RECOVERY %}
+    <RecoveryDetails>
+        <Longitude>{{RECOVERY.RECOVER_LON}}</Longitude>
+        <Latitude>{{RECOVERY.RECOVER_LAT}}</Latitude>
+        <DepthInstrument_m>{{RECOVERY.RECOVER_INSTRUMENT_DEPTH}}</DepthInstrument_m>
+        <DepthBottom_m>{{RECOVERY.RECOVER_BOTTOM_DEPTH}}</DepthBottom_m>
+        <TimeStamp>{{RECOVERY.RECOVERY_TIME}}</TimeStamp>
+        <AudioTimeStamp>{{RECOVERY.AUDIO_END}}</AudioTimeStamp>
+        <Vessel>{{RECOVERY.RECOVER_SHIP}}</Vessel>
+        {% for PERSON in RECOVERY.SCIENTISTS %}
+        <ResponsibleParty>
+            <individualName>{{PERSON.NAME}}</individualName>
+            <organizationName>{{PERSON
+                .ORGANIZATION}}</organizationName>
+            <positionName>{{PERSON.POSITION}}</positionName>
+            <contactInfo>
+                <phone>
+                    <voice>{{PERSON.PHONE}}</voice>
+                </phone>
+                <address>
+                    {% for STREET in PERSON.STREET %}
+                    <deliveryPoint>{{STREET}}</deliveryPoint>
+                    {% endfor %}
+                    <city>{{PERSON.CITY}}</city>
+                    <administrativeArea>{{PERSON
+                        .STATE}}</administrativeArea>
+                    <postalCode>{{PERSON.ZIP}}</postalCode>
+                    <country>{{PERSON.COUNTRY}}</country>
+                    <electronicMailAddress>{{PERSON
+                        .EMAIL}}</electronicMailAddress>
+                </address>
+            </contactInfo>
+        </ResponsibleParty>
+        {% endfor %}
+    </RecoveryDetails>
+    {% endif %}
+    <PackageDetails>
+        <Title>{{TITLE}}</Title>
+        <Purpose>{{PURPOSE}}</Purpose>
+        <Abstract>{{ABSTRACT}}</Abstract>
+        <DataComment>{{DATA_COMMENT}}</DataComment>
+        <ResponsibleParty xlink:title="{{METADATA_AUTHOR.NAME}} (meta author)"
+                          xlink:href="http://www.ngdc.noaa.gov/docucomp/{{METADATA_AUTHOR.UUID}}"/>
+        {% for org in SPONSORS %}
+        <ResponsibleParty
+                xlink:title="{{org.name}} (originator)"
+                xlink:href="http://www.ngdc.noaa.gov/docucomp/{{org.uuid}}"/>
+        {% endfor %}
+        {% for org in FUNDERS %}
+        <ResponsibleParty xlink:title="{{org.name}} (funding source)"
+                          xlink:href="http://www.ngdc.noaa.gov/docucomp/{{org.uuid}}"/>
+        {% endfor %}
+    </PackageDetails>
+    {% if SENSORS %}
+    <Sensors>
+        {% if SENSORS.AUDIO %}
+        {% for sensor in SENSORS.AUDIO %}
+        <Audio>
+            <Number>{{sensor.number}}</Number>
+            <SensorID>{{sensor.id}}</SensorID>
+            <Geometry>
+                <x_m>{{sensor.pos_x}}</x_m>
+                <y_m>{{sensor.pos_y}}</y_m>
+                <z_m>{{sensor.pos_z}}</z_m>
+            </Geometry>
+            <Name>{{sensor.name}}</Name>
+            <Description>{{sensor.description}}</Description>
+            <HydrophoneID>{{sensor.hydro_id}}</HydrophoneID>
+            <PreampID>{{sensor.pre_id}}</PreampID>
+        </Audio>
+        {% endfor %}
+        {% endif %}
+        {% if SENSORS.DEPTH %}
+        {% for sensor in SENSORS.DEPTH %}
+        <Depth>
+            <Number>{{sensor.number}}</Number>
+            <SensorID>{{sensor.id}}</SensorID>
+            <Geometry>
+                <x_m>{{sensor.pos_x}}</x_m>
+                <y_m>{{sensor.pos_y}}</y_m>
+                <z_m>{{sensor.pos_z}}</z_m>
+            </Geometry>
+            <Name>{{sensor.name}}</Name>
+            <Description>{{sensor.description}}</Description>
+        </Depth>
+        {% endfor %}
+        {% endif %}
+        {% if SENSORS.OTHER %}
+        {% for sensor in SENSORS.OTHER %}
+        <Sensor>
+            <Number>{{sensor.number}}</Number>
+            <SensorID>{{sensor.id}}</SensorID>
+            <Geometry>
+                <x_m>{{sensor.pos_x}}</x_m>
+                <y_m>{{sensor.pos_y}}</y_m>
+                <z_m>{{sensor.pos_z}}</z_m>
+            </Geometry>
+            <Name>{{sensor.name}}</Name>
+            <Description>{{sensor.description}}</Description>
+            <Type>{{sensor.sensor_type}}</Type>
+            <Properties>{{sensor.properties}}</Properties>
+        </Sensor>
+        {% endfor %}
+        {% endif %}
+    </Sensors>
+    {% endif %}
+</ns1:Deployment>
