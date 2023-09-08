@@ -1,0 +1,26 @@
+{
+    "id": "74CFB732",
+    "path": "~/GitHub/ADRIFT-Deployment-PassivePacker/PassivePacker_Deployment.R",
+    "project_path": "PassivePacker_Deployment.R",
+    "type": "r_source",
+    "hash": "0",
+    "contents": "",
+    "dirty": false,
+    "created": 1693497091592.0,
+    "source_on_save": false,
+    "relative_order": 1,
+    "properties": {
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "53,0",
+        "scrollLine": "46"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1693510666,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1693510666488,
+    "read_only": false,
+    "read_only_alternatives": []
+}
