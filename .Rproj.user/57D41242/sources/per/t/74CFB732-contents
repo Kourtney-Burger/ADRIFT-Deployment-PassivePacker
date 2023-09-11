@@ -70,11 +70,32 @@ dd["PURPOSE"][is.na(dd["PURPOSE"])] <- 'From Report'
 dd["ABSTRACT"][is.na(dd["ABSTRACT"])] <- 'From Report'
 
 
+
+dd[] <- lapply(dd, as.character)
+dd$ID <- lapply(dd$ID, as.integer)
+dd$SAMPLING_DETAILS
+dd$QUALITY_DETAILS
+dd$SCIENTISTS
+dd$FUNDERS
+dd$SENSORS
+dd$DEPLOYMENT_DETAILS
+dd$CALIBRATION_INFO
+dd$DATASET_INFO
+dd$ANCILLARY_INFO
+
+str(dd)
+
 #Write dataframe to existing database
 con <- dbConnect(SQLite(), "PassivePacker_v.4.0.2-win64/database/packageData.sqlite")
 dbWriteTable(con, 'DEPLOYMENT_DATA', dd, overwrite = TRUE)
 dbDisconnect(con)
 
-db <- dbConnect(SQLite(), "PassivePacker_v.4.0.2-win64/database/packageData.sqlite")
-PP_DeploymentData <- dbReadTable(db, 'DEPLOYMENT_DATA')
+#db <- dbConnect(SQLite(), "PassivePacker_v.4.0.2-win64/database/packageData.sqlite")
+#PP_DeploymentData <- dbReadTable(db, 'DEPLOYMENT_DATA')
+
+#MAKE CALIBRATION INFO SPREADSHEET
+calInfo <- read.csv("Calibration info/CCES_calibrationInfo.csv")
+
+#Combine hydrophone calibration info with matching deployment, based on array name
+
 
