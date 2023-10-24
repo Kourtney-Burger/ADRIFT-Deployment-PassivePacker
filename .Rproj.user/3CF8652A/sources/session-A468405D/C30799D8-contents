@@ -7,6 +7,7 @@ output: html_document
 
 # GENERAL PLAN
 
+0.  Manipulate data folder structure using DataFolderManipulation.Rmd to prepare data paths for passive packer
 1.  Download Deployment Details spreadsheet and save to folder within project
 2.  Manipulate Deployment Details spreadsheet to align with passive packer fields
 3.  Add additional passive packer fields
@@ -395,7 +396,7 @@ identical(newFunList,funList)
 # For ADRIFT, use inventory spreadsheets
 
 # read in data from calibration info spreadsheet
-calInfo <- read.csv("Calibration Info/CCES2018_CalibrationInfo.csv")
+calInfo <- read.csv("Calibration Files/CCES2018_CalibrationInfo.csv")
 
 # Copy text from database 
 senText <- '{"0": {"type": "Audio Sensor", "number": "1", "id": "856048", "name": "HTI-92-WB", "pos_x": "", "pos_y": "", "pos_z": "-100", "value_1": "856048", "value_2": "", "description": ""}, "1": {"type": "Audio Sensor", "number": "2", "id": "856059", "name": "HTI-96-min", "pos_x": "", "pos_y": "", "pos_z": "-105", "value_1": "856059", "value_2": "", "description": ""}, "2": {"type": "Depth Sensor", "number": "3", "id": "NA", "name": "", "pos_x": "", "pos_y": "", "pos_z": "-100", "value_1": "", "value_2": "", "description": ""}, "3": {"type": "Other Sensor", "number": "4", "id": "A/B", "name": "SPOT", "pos_x": "", "pos_y": "", "pos_z": "+1", "value_1": "GPS", "value_2": "", "description": "2 SPOT sattelite GPS sensors"}}'
@@ -539,7 +540,7 @@ for(i in 1:nrow(dd)) {
     'RECOVERY_TIME' = posixToText(deployDetails$Recovery_Date[i]),
     'AUDIO_START' = posixToText(deployDetails$Data_Start[i]),
     'AUDIO_END' = posixToText(deployDetails$Data_End[i]),
-    'SOURCE_PATH' =  '',
+    'SOURCE_PATH' =  paste('F:/CCES_RawData/manipulated/audio/',deployDetails$Data_ID[i], sep = ""), 
     'DATA_COMMENT' = deployDetails$Notes[i]
   )
 dd$DATASET_INFO[i] <- toJSON(newDiList)
@@ -562,7 +563,27 @@ identical(newDiList,diList)
 ## Ancillary Info Column
 
 ```{r}
-# To Do
+for(i in 1:nrow(dd)) {
+  newAncilList <- list(
+    'BIO_PATH' = "",
+    'OTHER_PATH' = paste('F:/CCES_RawData/manipulated/metadata/', deployDetails$Data_ID[i], sep = ""),
+    'TEMP_PATH' = paste('F:/CCES_RawData/manipulated/temp/', deployDetails$Data_ID[i], sep = "")
+  )
+
+dd$ANCILLARY_INFO[i] <- toJSON(newAncilList)
+}
+
+
+ancilText <- '{"BIO_PATH":"","OTHER_PATH":"F:/CCES_RawData/manipulated/metadata/CCES_023","TEMP_PATH":"F:/CCES_RawData/manipulated/temp/CCES_023"}'
+
+ancilList <- fromJSON(ancilText)
+cat(toJSON(newAncilList))
+cat(toJSON(ancilList))
+
+# comment once working
+#view(newAncilList)
+#View(ancilList) #comment once running full loop
+identical(newAncilList,ancilList)
 ```
 
 # Append to passive packer table
