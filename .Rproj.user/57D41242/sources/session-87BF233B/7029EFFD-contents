@@ -6,12 +6,15 @@ output: html_document
 ---
 
 # GENERAL PLAN
- 1. Download Deployment Details spreadsheet and save to folder within project
- 2. Manipulate Deployment Details spreadsheet to allign with passive packer fields
- 3. Add additional passive packer fields
- 4. Connect to passive packer database and append it 
+
+0.  Manipulate data folder structure using DataFolderManipulation.Rmd to prepare data paths for passive packer
+1.  Download Deployment Details spreadsheet and save to folder within project
+2.  Manipulate Deployment Details spreadsheet to align with passive packer fields
+3.  Add additional passive packer fields
+4.  Connect to passive packer database and append it
 
 # Required Packages
+
 ```{r}
 library(here)
 library(DBI)
@@ -19,27 +22,32 @@ library(RSQLite)
 library(tidyverse)
 library(rjson)
 library(dplyr)
+library(stringr)
 ```
 
-
 # Set Working Directory
+
 ```{r}
 DepDir <- here('ADRIFT-Deployment-PassivePacker')
 ```
 
 # Taiki's helper function for dates
+
 Helper function to create all the "2020-01-01T00:00:00" formatted date strings that JSON will want. *Note that this requires that you convert all your dates in the deploy details data that you read in earlier (or anywhere else you might read dates from) to POSIXct format.*
+
 ```{r}
 posixToText <- function(x) {
     format(x, '%Y-%m-%dT%H:%M:%S')
 }
+
 posixToText(as.POSIXct("2018-11-22 08:28:24", tz='UTC'))
 ```
 
 # Import and Prep Data
+
 ```{r}
 # Import Deployment Details
-deployDetails <- read.csv("DeploymentDetails/CCES_DeploymentDetails.csv")
+deployDetails <- read.csv("DeploymentDetails Files/CCES_DeploymentDetails.csv")
 
 # Change soundtrap names
 deployDetails[deployDetails == 'ST640'] <- 'SoundTrap 640'
@@ -152,18 +160,18 @@ dd$PROJECT <- paste('["',dd$PROJECT,'"]')
 dd$PROJECT <- gsub(" ","",dd$PROJECT)
 dd$PACKAGE_ID <- gsub(" ","",dd$PACKAGE_ID)
 
-### Set package destination (change once hard drive is ready)  
-#dd$DESTINATION_PATH <- 'PathName'
-
 ### Dataset Description
 dd$PURPOSE <- 'The 2018 California Current Ecosystem Survey (CCES) was a multidisciplinary survey of the marine ecosystem from southern British Columbia, Canada to northern Baja California, Mexico. This survey was a collaboration between the Southwest Fisheries Science Center’s (SWFSC) Fishery Resource Division (FRD) and Marine Mammal and Turtle Division (MMTD). The survey included oceanographic measurements, use of multi-frequency echosounders, surface trawls, vertically and obliquely integrating net tows, continuous underway fish egg sampling, visual line-transect surveys for marine mammals, photographic capture-recapture studies of marine mammals, strip transect surveys for seabirds, and passive acoustic surveys of marine mammals using Drifting Acoustic Spar Buoy Recorders (DASBRs). The recordings collected in this project have been analyzed to detect echolocation signals from beaked whales, sperm whales, and dwarf and pygmy sperm whales.'
 dd$ABSTRACT <- 'The data from this deployment was collected using Drifting Acoustic Spar Buoy Recorders (DASBRs). DASBRs are free floating instruments with two hydrophones, in a vertical array, and a digital recorder. CCES 2018 was the second survey conducted under the Pacific Marine Assessment Program for Protected Species (PacMAPPS), supported by the National Oceanographic and Atmospheric Administration (NOAA), the US Navy, and the Bureau of Ocean Energy Management (BOEM). This study conducts annual cetacean and ecosystem surveys throughout the North Pacific and generates data products used by all three agencies to meet regulatory requirements pertaining to protected species.' 
-```
 
+### Set package destination (change once hard drive is ready)  
+dd$DESTINATION_PATH <- 'F:/'
+```
 
 # JSON Strings
 
 ## Sampling Details Column
+
 ```{r}
 for(i in 1:nrow(dd)) {
 #  for(i in 1) {
@@ -237,6 +245,7 @@ identical(newSdList,sdList)
 ```
 
 ## Quality Details Column
+
 ```{r}
 for(i in 1:nrow(dd)) {
 #  for(i in 1) {
@@ -277,6 +286,7 @@ identical(newQdList,qdList)
 ```
 
 ## Scientists Column
+
 ```{r}
 # This will be the same for each drift within a project
 # PASCAL - Shannon Rankin & Jennifer McCullough
@@ -311,8 +321,8 @@ cat(toJSON(sciList))
 identical(newSciList,sciList)
 ```
 
-
 ## Sponsers Column
+
 ```{r}
 # This will always be NOAA SWFSC
 
@@ -340,8 +350,8 @@ cat(toJSON(sponList))
 identical(newSponList,sponList)
 ```
 
-
 ## Funders Column
+
 ```{r}
 # This will always be NOAA SWFSC
 
@@ -377,8 +387,8 @@ cat(toJSON(funList))
 identical(newFunList,funList)
 ```
 
-
 ## Sensors Column
+
 ```{r}
 # A lot of this data has to come from the calibration sheet 
 # For CCES, all calibration info is in 'CCES2018_CalibrationInfo.csv'
@@ -386,7 +396,7 @@ identical(newFunList,funList)
 # For ADRIFT, use inventory spreadsheets
 
 # read in data from calibration info spreadsheet
-calInfo <- read.csv("Calibration Info/CCES2018_CalibrationInfo.csv")
+calInfo <- read.csv("Calibration Files/CCES2018_CalibrationInfo.csv")
 
 # Copy text from database 
 senText <- '{"0": {"type": "Audio Sensor", "number": "1", "id": "856048", "name": "HTI-92-WB", "pos_x": "", "pos_y": "", "pos_z": "-100", "value_1": "856048", "value_2": "", "description": ""}, "1": {"type": "Audio Sensor", "number": "2", "id": "856059", "name": "HTI-96-min", "pos_x": "", "pos_y": "", "pos_z": "-105", "value_1": "856059", "value_2": "", "description": ""}, "2": {"type": "Depth Sensor", "number": "3", "id": "NA", "name": "", "pos_x": "", "pos_y": "", "pos_z": "-100", "value_1": "", "value_2": "", "description": ""}, "3": {"type": "Other Sensor", "number": "4", "id": "A/B", "name": "SPOT", "pos_x": "", "pos_y": "", "pos_z": "+1", "value_1": "GPS", "value_2": "", "description": "2 SPOT sattelite GPS sensors"}}'
@@ -457,8 +467,8 @@ cat(toJSON(senList))
 identical(newSenList,senList)
 ```
 
-
 ## Deployment Details Column
+
 ```{r}
 for(i in 1:nrow(dd)) {
 #  for (i in 1) {
@@ -487,8 +497,8 @@ cat(toJSON(ddList))
 identical(newDdList,ddList)
 ```
 
-
 ## Calibration info column
+
 ```{r}
 for(i in 1:nrow(dd)) {
   newCalList <- list(
@@ -515,8 +525,8 @@ cat(toJSON(calList))
 identical(newCalList,calList)
 ```
 
-
 ## Dataset info column
+
 ```{r}
 for(i in 1:nrow(dd)) {
 #  for (i in 1) {
@@ -530,7 +540,7 @@ for(i in 1:nrow(dd)) {
     'RECOVERY_TIME' = posixToText(deployDetails$Recovery_Date[i]),
     'AUDIO_START' = posixToText(deployDetails$Data_Start[i]),
     'AUDIO_END' = posixToText(deployDetails$Data_End[i]),
-    'SOURCE_PATH' =  '',
+    'SOURCE_PATH' =  paste('F:/CCES_RawData/manipulated/audio/',deployDetails$Data_ID[i], sep = ""), 
     'DATA_COMMENT' = deployDetails$Notes[i]
   )
 dd$DATASET_INFO[i] <- toJSON(newDiList)
@@ -550,17 +560,36 @@ cat(toJSON(diList))
 identical(newDiList,diList)
 ```
 
-
 ## Ancillary Info Column
+
 ```{r}
-# To Do
+for(i in 1:nrow(dd)) {
+  newAncilList <- list(
+    'BIO_PATH' = "",
+    'OTHER_PATH' = paste('F:/CCES_RawData/manipulated/metadata/', deployDetails$Data_ID[i], sep = ""),
+    'TEMP_PATH' = paste('F:/CCES_RawData/manipulated/temp/', deployDetails$Data_ID[i], sep = "")
+  )
+
+dd$ANCILLARY_INFO[i] <- toJSON(newAncilList)
+}
+
+
+ancilText <- '{"BIO_PATH":"","OTHER_PATH":"F:/CCES_RawData/manipulated/metadata/CCES_023","TEMP_PATH":"F:/CCES_RawData/manipulated/temp/CCES_023"}'
+
+ancilList <- fromJSON(ancilText)
+cat(toJSON(newAncilList))
+cat(toJSON(ancilList))
+
+# comment once working
+#view(newAncilList)
+#View(ancilList) #comment once running full loop
+identical(newAncilList,ancilList)
 ```
 
-
 # Append to passive packer table
+
 ```{r}
 con <- dbConnect(SQLite(), "PassivePacker_v.4.0.3-win64/database/packageData.sqlite")
 dbAppendTable(con, 'DEPLOYMENT_DATA', dd)
 dbDisconnect(con)
 ```
-
