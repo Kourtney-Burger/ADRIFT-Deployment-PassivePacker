@@ -1,0 +1,218 @@
+# passive packer notes
+
+Line 71 `dd$ID <- c(1:num_rows)` you probably need to add the max ID from the existing database data, otherwise you won't have unique ID values.
+Something like this:
+
+```{r}
+# If no existing data, maxID is 0
+oldMax <- ifelse(nrow(ppdt) == 0, 0, max(ppdt$ID))
+dd$ID <- (1:nrow(dd)) + oldMax
+```
+
+Also going to create a helper function to create all the "2020-01-01T00:00:00" formatted date strings that JSON will want. Note that this requires that you convert all your dates in the deploy details data that you read in earlier (or anywhere else you might read dates from) to POSIXct format.
+
+```{r}
+posixToText <- function(x) {
+    format(x, '%Y-%m-%dT%H:%M:%S')
+}
+posixToText(as.POSIXct("2018-11-22 08:28:24", tz='UTC'))
+```
+
+Creating some fake deploy details data to run my example below
+
+```{r}
+# fake dd
+dd <- list(Data_Start = as.POSIXct('2018-11-22 08:28:24', tz='UTC'),
+           Data_End = as.POSIXct('2018-12-03 00:49:11', tz='UTC'),
+           RecordingDuration_m = '2',
+           RecordingInterval_m = '5',
+           SampleRate_kHz = '576',
+           ChannelNumber_1 = '1',
+           ChannelNumber_2 = '2'
+)
+#           
+```
+
+## JSON Fill Example
+
+Going to create a new list `newSdList` following the format you laid out below, filling in from the columns you identified.
+
+To get this to work for the full deploy details you'd need to do this in a loop or something similar. 
+One thing I'm not sure about is if the numeric values need to be converted to characters, they show up as `"2"` instead of `2` in the text you copied from the database.
+
+
+```{r}
+# LIST COL NAME = DEPLOY DETAILS COL NAME
+# 1
+  # channel_start = Data_Start 
+  # channel_end = Data_End 
+  # sensor = ChannelNumber_1
+  # sampling details
+    #type: sample_rate_widget
+      #value_1 = SampleRate_kHz
+      #value_2 = 16 (should always be 16, variable not in deployment details)
+      #checked = false (variable not in deployment details)
+      #start = Data_Start 
+      #end = Data_End   
+    #type: duty_cycle_widget 
+      #value_1 = RecordingDuration_m
+      #value_2 = RecordingInterval_m
+      #checked = false (variable not in deployment details)
+      #start = Data_Start 
+      #end = Data_End
+# 2
+  # channel_start = Data_Start 
+  # channel_end = Data_End 
+  # sensor = ChannelNumber_2
+  # sampling details
+    #type: sample_rate_widget
+      #value_1 = SampleRate_kHz
+      #value_2 = 16 (should always be 16, variable not in deployment details)
+      #checked = false (variable not in deployment details)
+      #start = Data_Start 
+      #end = Data_End   
+    #type: duty_cycle_widget 
+      #value_1 = RecordingDuration_m
+      #value_2 = RecordingInterval_m
+      #checked = false (variable not in deployment details)
+      #start = Data_Start 
+      #end = Data_End
+
+#MY LOOP CODE
+#for(i in 1:nrow(dd)) {
+  for(i in 1) {
+  newSdList <- list(
+    '1' = list(
+        'channel_start' = posixToText(dd$Data_Start[1]),
+        'channel_end' = posixToText(dd$Data_End[1]),
+        'sensor' = dd$ChannelNumber_1[1],
+        'sampling_details' = list(
+            list(
+                'type' = 'sample_rate_widget',
+                'value_1' = dd$SampleRate_kHz[1],
+                'value_2' = 16,
+                'checked' = FALSE,
+                'start' = posixToText(dd$Data_Start[1]),
+                'end' = posixToText(dd$Data_End[1])
+            ),
+            list(
+                'type' = 'duty_cycle_widget',
+                'value_1' = dd$RecordingDuration_m[1],
+                'value_2' = dd$RecordingInterval_m[1],
+                'checked' = FALSE,
+                'start' = posixToText(dd$Data_Start[1]),
+                'end' = posixToText(dd$Data_End[1])
+            )
+        )
+    ),
+    '2' = list(
+        'channel_start' = posixToText(dd$Data_Start[1]),
+        'channel_end' = posixToText(dd$Data_End[1]),
+        'sensor' = dd$ChannelNumber_2[1],
+        'sampling_details' = list(
+            list(
+                'type' = 'sample_rate_widget',
+                'value_1' = dd$SampleRate_kHz[1],
+                'value_2' = 16,
+                'checked' = FALSE,
+                'start' = posixToText(dd$Data_Start[1]),
+                'end' = posixToText(dd$Data_End[1])
+            ),
+            list(
+                'type' = 'duty_cycle_widget',
+                'value_1' = dd$RecordingDuration_m[1],
+                'value_2' = dd$RecordingInterval_m[1],
+                'checked' = FALSE,
+                'start' = posixToText(dd$Data_Start[1]),
+                'end' = posixToText(dd$Data_End[1])
+            )
+        )
+    )
+)
+        
+        
+  # Copy text from database 
+sdText <- '{"1": {"channel_start": "2018-11-22T08:28:24", 
+                 "channel_end": "2018-12-03T00:49:11", 
+                 "sensor": "1", 
+                 "sampling details": [
+                   {"type": "sample_rate_widget", 
+                              "value_1": "576", 
+                              "value_2": "16", 
+                              "checked": false, 
+                              "start": "2018-11-22T08:28:24", 
+                              "end": "2018-12-03T00:49:11"}, 
+                   {"type": "duty_cycle_widget", 
+                              "value_1": "2", 
+                              "value_2": "5", 
+                              "checked": false, 
+                              "start": "2018-11-22T08:28:24", 
+                              "end": "2018-12-03T00:49:11"}]}, 
+           "2": {"channel_start": "2018-11-22T08:28:24", 
+                 "channel_end": "2018-12-03T00:49:11", 
+                 "sensor": "2", 
+                 "sampling details": [
+                   {"type": "duty_cycle_widget", 
+                              "value_1": "2", 
+                              "value_2": "5", 
+                              "checked": false, 
+                              "start": "2018-11-22T08:28:24", 
+                              "end": "2018-12-03T00:49:11"}, 
+                   {"type": "sample_rate_widget", 
+                              "value_1": "576", 
+                              "value_2": "16", 
+                              "checked": false, 
+                              "start": "2018-11-22T08:28:24", 
+                              "end": "2018-12-03T00:49:11"}]}}'
+library(rjson)
+sdList <- fromJSON(sdText)
+cat(toJSON(newSdList))
+cat(toJSON(sdList))
+
+# save newSdList to r list
+#dd$SAMPLING_DETAILS[i] <- toJSON(newSdList)
+}
+View(sdList) #comment once running full loop
+```
+
+# EXAMPLE FROM MY FINALIZED CODE 
+```{r}
+for(i in 1:nrow(dd)) {
+#  for (i in 1) {
+    newDdList <- list(
+      'DEPLOY_TYPE' = 'Mobile Marine',
+      'SEA_AREA' = 'North Pacific Ocean',
+      'DEPLOY_SHIP' = deployDetails$Deploy_Vessel[i],
+      'FILES' = paste('Z:/METADATA/CCES_2018/',deployDetails$Data_ID[i],'/',deployDetails$Data_ID[i],'_GPS/',deployDetails$Data_ID[i],'_GPS.csv', sep = ""),
+      'POSITION_DETAILS' = 'Satellite gps'
+    )
+    
+dd$DEPLOYMENT_DETAILS[i] <- toJSON(newDdList)
+}
+
+
+# Copy text from database 
+ddText <- '{"DEPLOY_TYPE": "Mobile Marine","SEA_AREA": "North Pacific Ocean","DEPLOY_SHIP": "R/V Ruben Lasker","FILES":"Z:/METADATA/CCES_2018/CCES_023/CCES_023_GPS/CCES_023_GPS.csv","POSITION_DETAILS": "Satellite gps"}'
+
+ddList <- fromJSON(ddText)
+cat(toJSON(newDdList))
+cat(toJSON(ddList))
+
+# Comment once working
+#view(newDdList)
+#View(ddList) 
+#identical(newDdList,ddList)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
