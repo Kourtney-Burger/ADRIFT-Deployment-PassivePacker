@@ -107,6 +107,17 @@ for (i in 1:nrow(deployDetails)) {
                                deployDetails$Data_ID[i], '/logs', sep = ""))
     # Copy list of files to new directory 
     file.copy(currentLogs, newLogs)
+    
+  #Calibration File
+    # List of files I want to move
+    currentCal <- list.files('~/GitHub/ADRIFT-Deployment-PassivePacker/Calibration Files', full.names = T)
+    # Create folder/directory to move the list above to
+    dir.create(file.path(paste('F:/CCES_RawData/manipulated/metadata/',
+                               deployDetails$Data_ID[i], '/calibration', sep = "")))
+    newCal <- file.path(paste('F:/CCES_RawData/manipulated/metadata/',
+                               deployDetails$Data_ID[i], '/calibration', sep = ""))
+    # Copy list of files to new directory 
+    file.copy(currentCal, newCal)
 }
 ```
 

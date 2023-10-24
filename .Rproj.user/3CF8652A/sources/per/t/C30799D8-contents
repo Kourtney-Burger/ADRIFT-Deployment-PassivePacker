@@ -273,7 +273,7 @@ for(i in 1:nrow(dd)) {
 dd$QUALITY_DETAILS[i] <- toJSON(newQdList)
 }
 
-qdText <- '{"analyst": "Cory Hom-Weaver", "analyst_uuid": "8f9f3e13-3571-436d-b1fd-6e779acd9a9f", "quality_details": [{"quality": "Good", "low_freq": "20", "high_freq": "576000", "start": "2018-11-22T08:28:24", "end": "2018-12-03T00:49:11", "comments": "", "channels": [1]}], "method": "", "objectives": "", "abstract": ""}'
+qdText <- '{"analyst": "Cory Hom-Weaver", "analyst_uuid": "8f9f3e13-3571-436d-b1fd-6e779acd9a9f", "quality_details": [{"quality": "Good", "low_freq": "20", "high_freq": "576000", "start": "2018-11-22T08:28:24", "end": "2018-12-03T00:49:11", "comments": "Refer to CCES_023_500Hz_LF_Noise_Log.xls for detailed noise logs.", "channels": [1]}], "method": "", "objectives": "", "abstract": ""}'
 
 qdList <- fromJSON(qdText)
 cat(toJSON(newQdList))
@@ -399,7 +399,7 @@ identical(newFunList,funList)
 calInfo <- read.csv("Calibration Files/CCES2018_CalibrationInfo.csv")
 
 # Copy text from database 
-senText <- '{"0": {"type": "Audio Sensor", "number": "1", "id": "856048", "name": "HTI-92-WB", "pos_x": "", "pos_y": "", "pos_z": "-100", "value_1": "856048", "value_2": "", "description": ""}, "1": {"type": "Audio Sensor", "number": "2", "id": "856059", "name": "HTI-96-min", "pos_x": "", "pos_y": "", "pos_z": "-105", "value_1": "856059", "value_2": "", "description": ""}, "2": {"type": "Depth Sensor", "number": "3", "id": "NA", "name": "", "pos_x": "", "pos_y": "", "pos_z": "-100", "value_1": "", "value_2": "", "description": ""}, "3": {"type": "Other Sensor", "number": "4", "id": "A/B", "name": "SPOT", "pos_x": "", "pos_y": "", "pos_z": "+1", "value_1": "GPS", "value_2": "", "description": "2 SPOT sattelite GPS sensors"}}'
+senText <- '{"0": {"type": "Audio Sensor", "number": "1", "id": "856048", "name": "HTI-92-WB", "pos_x": "", "pos_y": "", "pos_z": "-100", "value_1": "856048", "value_2": "", "description": ""}, "1": {"type": "Audio Sensor", "number": "2", "id": "856059", "name": "HTI-96-min", "pos_x": "", "pos_y": "", "pos_z": "-105", "value_1": "856059", "value_2": "", "description": ""}, "2": {"type": "Depth Sensor", "number": "3", "id": "NA", "name": "NA", "pos_x": "", "pos_y": "", "pos_z": "-100", "value_1": "", "value_2": "", "description": ""}, "3": {"type": "Other Sensor", "number": "4", "id": "A/B", "name": "SPOT", "pos_x": "", "pos_y": "", "pos_z": "+1", "value_1": "GPS", "value_2": "", "description": "2 SPOT sattelite GPS sensors"}}'
 
 for(i in 1:nrow(dd)) {
 #  for (i in 1) {
@@ -548,7 +548,7 @@ dd$DATASET_INFO[i] <- toJSON(newDiList)
 
 # Copy text from database 
 # Copy text from database 
-diText <- '{"TYPE": "Raw","SUB_TYPE": "Audio","PLATFORM": "Drifter","INSTRUMENT_TYPE": "SoundTrap 4300 HF","INSTRUMENT_ID": "1208791071","DEPLOYMENT_TIME": "2018-11-22T08:10:00","RECOVERY_TIME": "2018-12-03T00:25:00","AUDIO_START": "2018-11-22T08:28:24","AUDIO_END": "2018-12-03T00:49:11","SOURCE_PATH":"","DATA_COMMENT": "no depth data, Low frequency strumming and knocking under 50 Hz, ship noise under 250 Hz"}'
+diText <- '{"TYPE": "Raw","SUB_TYPE": "Audio","PLATFORM": "Drifter","INSTRUMENT_TYPE": "SoundTrap 4300 HF","INSTRUMENT_ID": "1208791071","DEPLOYMENT_TIME": "2018-11-22T08:10:00","RECOVERY_TIME": "2018-12-03T00:25:00","AUDIO_START": "2018-11-22T08:28:24","AUDIO_END": "2018-12-03T00:49:11","SOURCE_PATH":"F:/CCES_RawData/manipulated/audio/CCES_023","DATA_COMMENT": "no depth data, Low frequency strumming and knocking under 50 Hz, ship noise under 250 Hz"}'
 
 diList <- fromJSON(diText)
 cat(toJSON(newDiList))
