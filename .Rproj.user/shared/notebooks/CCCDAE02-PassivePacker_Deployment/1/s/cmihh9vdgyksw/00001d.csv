@@ -1,0 +1,5 @@
+"0","library(stringr)
+"
+"2","Error: package or namespace load failed for ‘stringr’ in loadNamespace(i, c(lib.loc, .libPaths()), versionCheck = vI[[i]]):
+ there is no package called ‘stringi’
+"

@@ -1,5 +1,5 @@
 "0","# Import Deployment Details"
-"0","deployDetails <- read.csv(""DeploymentDetails/CCES_DeploymentDetails.csv"")"
+"0","deployDetails <- read.csv(""DeploymentDetails Files/CCES_DeploymentDetails.csv"")"
 "0",""
 "0","# Change soundtrap names"
 "0","deployDetails[deployDetails == 'ST640'] <- 'SoundTrap 640'"
