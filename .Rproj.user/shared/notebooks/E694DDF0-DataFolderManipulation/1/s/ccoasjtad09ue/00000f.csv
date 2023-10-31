@@ -1,4 +1,0 @@
-"0","dir.create(file.path('F:/CCES_RawData/manipulated'))"
-"0","dir.create(file.path('F:/CCES_RawData/manipulated/audio'))"
-"0","dir.create(file.path('F:/CCES_RawData/manipulated/temp'))"
-"0","dir.create(file.path('F:/CCES_RawData/manipulated/metadata'))"

@@ -13,6 +13,7 @@ deployDetails <- read.csv("DeploymentDetails Files/CCES_DeploymentDetails.csv")
 # Create Manipulated file directory
 Only run once 
 ```{r}
+dir.create(file.path('F:/CCES_RawData'))
 dir.create(file.path('F:/CCES_RawData/manipulated'))
 dir.create(file.path('F:/CCES_RawData/manipulated/audio'))
 dir.create(file.path('F:/CCES_RawData/manipulated/temp'))
@@ -20,12 +21,19 @@ dir.create(file.path('F:/CCES_RawData/manipulated/metadata'))
 ```
 
 
-# Audio Files - Move from main folder to wav subfolder
+# Audio Files - Move from DON to audio subfolder
 ```{r}
+# Set up progress bar
+pb <- txtProgressBar(min = 0,      # Minimum value of the progress bar
+                     max = nrow(deployDetails), # Maximum value of the progress bar
+                     style = 3,    # Progress bar style (also available style = 1 and style = 2)
+                     width = 50,   # Progress bar width. Defaults to getOption("width")
+                     char = "=")   # Character used to create the bar
+
 # Start loop
 for (i in 1:nrow(deployDetails)) {
   # List of files I want to move
-  currentAudio <- list.files(paste('F:/CCES_RawData/RAW/',deployDetails$Data_ID[i], 
+  currentAudio <- list.files(paste('Z:/RECORDINGS/DRIFTERS/CCES_2018/RAW/',deployDetails$Data_ID[i], 
                                    sep = ""), pattern = "\\.wav$", full.names = T)
 
   # Create folder/directory to move the list above to
@@ -36,17 +44,30 @@ for (i in 1:nrow(deployDetails)) {
 
   # Copy list of files to new directory 
   file.copy(currentAudio, newAudio)
+  
+  # Sets the progress bar to the current state
+  setTxtProgressBar(pb, i)
 }
+
+close(pb) # Close the connection
 ```
 
 
 #Ancillary Data
 ## Temperature Data 
 ```{r}
+# Set up progress bar
+pb <- txtProgressBar(min = 0,      # Minimum value of the progress bar
+                     max = nrow(deployDetails), # Maximum value of the progress bar
+                     style = 3,    # Progress bar style (also available style = 1 and style = 2)
+                     width = 50,   # Progress bar width. Defaults to getOption("width")
+                     char = "=")   # Character used to create the bar
+
 # Start loop
 for (i in 1:nrow(deployDetails)) {
   # List of files I want to move
-  currentTemp <- list.files(paste('F:/CCES_RawData/RAW/',deployDetails$Data_ID[i], sep = ""), pattern = "\\.temp.csv$", full.names = T)
+  currentTemp <- list.files(paste('Z:/RECORDINGS/DRIFTERS/CCES_2018/RAW/',deployDetails$Data_ID[i], 
+                                   sep = ""), pattern = "\\.temp.csv$", full.names = T)
 
   # Create folder/directory to move the list above to
   dir.create(file.path(paste('F:/CCES_RawData/manipulated/temp/',
@@ -56,68 +77,100 @@ for (i in 1:nrow(deployDetails)) {
 
   # Copy list of files to new directory 
   file.copy(currentTemp, newTemp)
+  
+  # Sets the progress bar to the current state
+  setTxtProgressBar(pb, i)
 }
+
+close(pb) # Close the connection
 ```
 
 
 ## Path to additional files 
 All additional metadata (accelerometer, depth, soundtrap logs)
 ```{r}
+# Set up progress bar
+pb <- txtProgressBar(min = 0,      # Minimum value of the progress bar
+                     max = nrow(deployDetails), # Maximum value of the progress bar
+                     style = 3,    # Progress bar style (also available style = 1 and style = 2)
+                     width = 50,   # Progress bar width. Defaults to getOption("width")
+                     char = "=")   # Character used to create the bar
+
 # Loop to create drift specific metadata folders with 3 folders within it (accelerometer, depth, soundtrap logs)
 for (i in 1:nrow(deployDetails)) {
   dir.create(file.path(paste('F:/CCES_RawData/manipulated/metadata/',
                              deployDetails$Data_ID[i], sep = "")))
   
-  #Accelerometer
-    # List of files I want to move  
-    currentAccel <- list.files(paste('F:/CCES_RawData/RAW/',
-                                     deployDetails$Data_ID[i], sep = ""), 
-                               pattern = "\\.accel.csv$", full.names = T)
-    # Create folder/directory to move the list above to
-    dir.create(file.path(paste('F:/CCES_RawData/manipulated/metadata/',
-                               deployDetails$Data_ID[i],'/accel', sep = "")))
-    newAccel <- file.path(paste('F:/CCES_RawData/manipulated/metadata/',
-                                deployDetails$Data_ID[i],'/accel', sep = ""))
-    # Copy list of files to new directory 
-    file.copy(currentAccel, newAccel)
-
-  #Depth
-    # List of files I want to move
-    currentDepth <- list.files(paste('F:/CCES_RawData/Metadata/',
-                                     deployDetails$Data_ID[i],'/',
-                                     deployDetails$Data_ID[i],'_DEPTH', sep = ""), 
-                               pattern = "\\.csv$", full.names = T)
-    # Create folder/directory to move the list above to
-    dir.create(file.path(paste('F:/CCES_RawData/manipulated/metadata/',
-                               deployDetails$Data_ID[i],'/depth', sep = "")))
-    newDepth <- file.path(paste('F:/CCES_RawData/manipulated/metadata/',
-                                deployDetails$Data_ID[i],'/depth', sep = ""))
-    # Copy list of files to new directory 
-    file.copy(currentDepth, newDepth)
-
-  #Logs
-    # List of files I want to move
-    currentLogs <- list.files(paste('F:/CCES_RawData/RAW/',
-                                    deployDetails$Data_ID[i], sep = ""), 
-                              pattern = "\\.log.xml$", full.names = T)
-    # Create folder/directory to move the list above to
-    dir.create(file.path(paste('F:/CCES_RawData/manipulated/metadata/',
-                               deployDetails$Data_ID[i], '/logs', sep = "")))
-    newLogs <- file.path(paste('F:/CCES_RawData/manipulated/metadata/',
-                               deployDetails$Data_ID[i], '/logs', sep = ""))
-    # Copy list of files to new directory 
-    file.copy(currentLogs, newLogs)
+  # #Accelerometer
+  #   # List of files I want to move  
+  #   currentAccel <- list.files(paste('Z:/RECORDINGS/DRIFTERS/CCES_2018/RAW/',
+  #                                    deployDetails$Data_ID[i], sep = ""), 
+  #                              pattern = "\\.accel.csv$", full.names = T)
+  #                                    
+  #   # Create folder/directory to move the list above to
+  #   dir.create(file.path(paste('F:/CCES_RawData/manipulated/metadata/',
+  #                              deployDetails$Data_ID[i],'/accel', sep = "")))
+  #   newAccel <- file.path(paste('F:/CCES_RawData/manipulated/metadata/',
+  #                               deployDetails$Data_ID[i],'/accel', sep = ""))
+  #   # Copy list of files to new directory 
+  #   file.copy(currentAccel, newAccel)
+  # 
+  # #Depth
+  #   # List of files I want to move
+  #   currentDepth <- list.files(paste('Z:/METADATA/', deployDetails$Data_ID[i],'/',
+  #                                    deployDetails$Data_ID[i],'_DEPTH', sep = ""), 
+  #                              pattern = "\\.csv$", full.names = T)
+  #   # Create folder/directory to move the list above to
+  #   dir.create(file.path(paste('F:/CCES_RawData/manipulated/metadata/',
+  #                              deployDetails$Data_ID[i],'/depth', sep = "")))
+  #   newDepth <- file.path(paste('F:/CCES_RawData/manipulated/metadata/',
+  #                               deployDetails$Data_ID[i],'/depth', sep = ""))
+  #   # Copy list of files to new directory 
+  #   file.copy(currentDepth, newDepth)
+  # 
+  # #Logs
+  #   # List of files I want to move
+  #   currentLogs <- list.files(paste('Z:/RECORDINGS/DRIFTERS/CCES_2018/RAW/',
+  #                                   deployDetails$Data_ID[i], sep = ""), 
+  #                             pattern = "\\.log.xml$", full.names = T)
+  #   # Create folder/directory to move the list above to
+  #   dir.create(file.path(paste('F:/CCES_RawData/manipulated/metadata/',
+  #                              deployDetails$Data_ID[i], '/logs', sep = "")))
+  #   newLogs <- file.path(paste('F:/CCES_RawData/manipulated/metadata/',
+  #                              deployDetails$Data_ID[i], '/logs', sep = ""))
+  #   # Copy list of files to new directory 
+  #   file.copy(currentLogs, newLogs)
+  #   
+  # #Calibration File
+  #   # List of files I want to move
+  #   currentCal <- list.files('~/GitHub/ADRIFT-Deployment-PassivePacker/Calibration Files', 
+  #                            full.names = T)
+  #   # Create folder/directory to move the list above to
+  #   dir.create(file.path(paste('F:/CCES_RawData/manipulated/metadata/',
+  #                              deployDetails$Data_ID[i], '/calibration', sep = "")))
+  #   newCal <- file.path(paste('F:/CCES_RawData/manipulated/metadata/',
+  #                              deployDetails$Data_ID[i], '/calibration', sep = ""))
+  #   # Copy list of files to new directory 
+  #   file.copy(currentCal, newCal)
     
-  #Calibration File
+  #Noise logs
     # List of files I want to move
-    currentCal <- list.files('~/GitHub/ADRIFT-Deployment-PassivePacker/Calibration Files', full.names = T)
+    currentNoise <- list.files(paste('Z:/RECORDINGS/DRIFTERS/CCES_2018/500Hz/DRIFT_', 
+                                     deployDetails$DeploymentID[i], '_500Hz', sep = ""),
+                               pattern = "\\_Noise_Log.xls", full.names = T)
     # Create folder/directory to move the list above to
     dir.create(file.path(paste('F:/CCES_RawData/manipulated/metadata/',
-                               deployDetails$Data_ID[i], '/calibration', sep = "")))
-    newCal <- file.path(paste('F:/CCES_RawData/manipulated/metadata/',
-                               deployDetails$Data_ID[i], '/calibration', sep = ""))
+                               deployDetails$Data_ID[i], '/NoiseLogs', sep = "")))
+    newNoise <- file.path(paste('F:/CCES_RawData/manipulated/metadata/',
+                               deployDetails$Data_ID[i], '/NoiseLogs', sep = ""))
     # Copy list of files to new directory 
-    file.copy(currentCal, newCal)
+    file.copy(currentNoise, newNoise)    
+    
+    
+  # Sets the progress bar to the current state
+  setTxtProgressBar(pb, i)
 }
+
+close(pb) # Close the connection
 ```
 
