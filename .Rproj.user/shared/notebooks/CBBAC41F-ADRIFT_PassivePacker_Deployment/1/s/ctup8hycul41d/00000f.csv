@@ -1,3 +1,4 @@
 "0","# Make all data characters"
 "0","deployDetails <- deployDetails %>%"
 "0","        mutate(across(where(is.numeric), as.character))"
+"0","deployDetails$DeploymentID <- as.numeric(deployDetails$DeploymentID)"
