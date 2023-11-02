@@ -1,3 +1,6 @@
-"0","db <- dbConnect(SQLite(), here(""PassivePacker_v.4.0.3-win64"", ""database"", ""TESTADRIFT_packageData.sqlite""))"
+"0","db <- dbConnect(SQLite(), here(""PassivePacker_v.4.0.3-win64"", ""database"", ""packageData.sqlite""))"
 "0","ppdt <- dbReadTable(db, ""DEPLOYMENT_DATA"")"
+"2","Warning:"
+"2"," call dbDisconnect() when finished working with a connection
+"
 "0","dbDisconnect(db)"

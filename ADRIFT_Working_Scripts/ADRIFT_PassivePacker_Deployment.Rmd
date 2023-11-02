@@ -93,16 +93,27 @@ deployDetails$Recovery_Date_UTC <- as.POSIXct(deployDetails$Recovery_Date_UTC, f
 ```
 
 ```{r}
+#Create chief sci column
+deployDetails <- deployDetails %>%
+  separate(Personnel, c("ChiefSci", "AdditionalPersonnel"), sep = ",", extra = "merge")
+```
+
+```{r}
+# Reorder drifts 
+deployDetails <- deployDetails %>% arrange(DeploymentID)
+```
+
+
+```{r}
 # Make all data characters
 deployDetails <- deployDetails %>%
         mutate(across(where(is.numeric), as.character))
-deployDetails$DeploymentID <- as.numeric(deployDetails$DeploymentID)
 ```
 
 # Prep Passive Packer Data Table
 ## Import Passive Packer data table
 ```{r}
-db <- dbConnect(SQLite(), here("PassivePacker_v.4.0.3-win64", "database", "TESTADRIFT_packageData.sqlite"))
+db <- dbConnect(SQLite(), here("PassivePacker_v.4.0.3-win64", "database", "packageData.sqlite"))
 ppdt <- dbReadTable(db, "DEPLOYMENT_DATA")
 dbDisconnect(db)
 ```
@@ -126,7 +137,7 @@ dd <- dd %>%
              PURPOSE = NA, ABSTRACT = NA, DATA_COMMENT = NA, TEMP_PATH = NA, 
              BIO_PATH = NA, OTHER_PATH = NA, DOCS_PATH = NA, CALIBRATION_PATH = NA,
              CREATION_TIME = NA, UPDATE_TIME = NA, USE = 'Y', SAMPLING_DETAILS = NA, 
-             QUALITY_DETAILS = NA, SCIENTISTS = NA, SPONSERS = NA, FUNDERS = NA, 
+             QUALITY_DETAILS = NA, SCIENTISTS = NA, SPONSORS = NA, FUNDERS = NA, 
              SENSORS = NA, DEPLOYMENT_DETAILS = NA, CALIBRATION_INFO = NA, 
              DATASET_INFO = NA, ANCILLARY_INFO = NA)
 
@@ -137,10 +148,6 @@ dd <- dd[, c(4,1,2,5,3,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,
 names(dd)[2] <- "PROJECT"
 names(dd)[3] <- "DEPLOYMENT_ID"
 names(dd)[5] <- "SITE_OR_CRUISE"
-
-# Reorder drifts 
-dd <- dd %>% arrange(DEPLOYMENT_ID)
-deployDetails$DeploymentID <- as.character(deployDetails$DeploymentID)
 
 # Add ID Number (Primary Key) 
 # If no existing data, maxID is 0
@@ -222,13 +229,12 @@ for(i in 1:nrow(dd)) {
 }        
         
 # Copy text from database 
-sdText <- '{"1": {"channel_start": "2018-11-22T08:28:24", "channel_end": "2018-12-03T00:49:11", "sensor": "1", "sampling details": [{"type": "sample_rate_widget", "value_1": "576", "value_2": "16", "checked": false, "start": "2018-11-22T08:28:24", "end": "2018-12-03T00:49:11"}, {"type": "duty_cycle_widget", "value_1": "2", "value_2": "5", "checked": false, "start": "2018-11-22T08:28:24", "end": "2018-12-03T00:49:11"}]}, "2": {"channel_start": "2018-11-22T08:28:24", "channel_end": "2018-12-03T00:49:11", "sensor": "2", "sampling details": [{"type": "duty_cycle_widget", "value_1": "2", "value_2": "5", "checked": false, "start": "2018-11-22T08:28:24", "end": "2018-12-03T00:49:11"}, {"type": "sample_rate_widget", "value_1": "576", "value_2": "16", "checked": false, "start": "2018-11-22T08:28:24", "end": "2018-12-03T00:49:11"}]}}'
+#sdText <- '{"1": {"channel_start": "2018-11-22T08:28:24", "channel_end": "2018-12-03T00:49:11", "sensor": "1", "sampling details": [{"type": "sample_rate_widget", "value_1": "576", "value_2": "16", "checked": false, "start": "2018-11-22T08:28:24", "end": "2018-12-03T00:49:11"}, {"type": "duty_cycle_widget", "value_1": "2", "value_2": "5", "checked": false, "start": "2018-11-22T08:28:24", "end": "2018-12-03T00:49:11"}]}, "2": {"channel_start": "2018-11-22T08:28:24", "channel_end": "2018-12-03T00:49:11", "sensor": "2", "sampling details": [{"type": "duty_cycle_widget", "value_1": "2", "value_2": "5", "checked": false, "start": "2018-11-22T08:28:24", "end": "2018-12-03T00:49:11"}, {"type": "sample_rate_widget", "value_1": "576", "value_2": "16", "checked": false, "start": "2018-11-22T08:28:24", "end": "2018-12-03T00:49:11"}]}}'
 
 
-
-sdList <- fromJSON(sdText)
-cat(toJSON(newSdList))
-cat(toJSON(sdList))
+# sdList <- fromJSON(sdText)
+# cat(toJSON(newSdList))
+# cat(toJSON(sdList))
 
 # save newSdList to r list
 #dd$SAMPLING_DETAILS[i] <- toJSON(newSdList)
@@ -236,20 +242,20 @@ cat(toJSON(sdList))
 # Comment once working
 #view(newSdList)
 #View(sdList) 
-identical(newSdList,sdList)
+# identical(newSdList,sdList)
 ```
 
-## Quality Details Column
+## TO DO - Quality Details Column
 
 ```{r}
 for(i in 1:nrow(dd)) {
 #  for(i in 1) {
     newQdList <- list(
-      'analyst' = 'Cory Hom-Weaver',
-      'analyst_uuid' = '8f9f3e13-3571-436d-b1fd-6e779acd9a9f',
+      'analyst' = deployDetails$Quality_Analyst,
+      'analyst_uuid' = '',
       'quality_details' = list(
         list(
-          'quality' = deployDetails$Quality_Category[i],
+          'quality' = 'Good', #Setting default to 'good' rather than deployDetails$Quality_Category[i] because the quality low and high frequency in our spreadsheet is referring to the frequency range where the data is good
           'low_freq' = deployDetails$Quality_LowFreq[i],
           'high_freq' = deployDetails$Quality_HighFreq[i],# Fix for kHz high quality
           'start' = posixToText(deployDetails$Data_Start[i]),
@@ -268,16 +274,16 @@ for(i in 1:nrow(dd)) {
 dd$QUALITY_DETAILS[i] <- toJSON(newQdList)
 }
 
-qdText <- '{"analyst": "Cory Hom-Weaver", "analyst_uuid": "8f9f3e13-3571-436d-b1fd-6e779acd9a9f", "quality_details": [{"quality": "Good", "low_freq": "20", "high_freq": "576000", "start": "2018-11-22T08:28:24", "end": "2018-12-03T00:49:11", "comments": "Refer to CCES_023_500Hz_LF_Noise_Log.xls for detailed noise logs.", "channels": [1]}], "method": "", "objectives": "", "abstract": ""}'
+#qdText <- '{"analyst": "Cory Hom-Weaver", "analyst_uuid": "8f9f3e13-3571-436d-b1fd-6e779acd9a9f", "quality_details": [{"quality": "Good", "low_freq": "20", "high_freq": "576000", "start": "2018-11-22T08:28:24", "end": "2018-12-03T00:49:11", "comments": "Refer to CCES_023_500Hz_LF_Noise_Log.xls for detailed noise logs.", "channels": [1]}], "method": "", "objectives": "", "abstract": ""}'
 
-qdList <- fromJSON(qdText)
-cat(toJSON(newQdList))
-cat(toJSON(qdList))
+# qdList <- fromJSON(qdText)
+# cat(toJSON(newQdList))
+# cat(toJSON(qdList))
 
 # Comment once working
 #view(newQdList)
 #View(qdList) 
-identical(newQdList,qdList)
+#identical(newQdList,qdList)
 ```
 
 ## Scientists Column
@@ -289,31 +295,31 @@ identical(newQdList,qdList)
 # ADRIFT - Shannon Rankin & Chief sci from deployment details
 
 # Copy text from database 
-sciText <- '[{"name": "Anne Simonis", "uuid": "3e9e1d2e-0fed-45d0-bc21-c388d4ea933a"}, {"name": "Shannon Rankin", "uuid": "c6a8953f-616b-4de1-99ce-3dd70e631dd5"}]'
+#sciText <- '[{"name": "Anne Simonis", "uuid": "3e9e1d2e-0fed-45d0-bc21-c388d4ea933a"}, {"name": "Shannon Rankin", "uuid": "c6a8953f-616b-4de1-99ce-3dd70e631dd5"}]'
 
 for (i in 1:nrow(dd)) {
   newSciList <- list(
     list(
-      'name' = 'Anne Simonis',
+      'name' = 'Shannon Rankin',
       'uuid' = '3e9e1d2e-0fed-45d0-bc21-c388d4ea933a'
     ),
     list(
-      'name' = 'Shannon Rankin',
-      'uuid' = 'c6a8953f-616b-4de1-99ce-3dd70e631dd5'
+      'name' = deployDetails$ChiefSci[i],
+      'uuid' = ''
     )
   )
 
   dd$SCIENTISTS[i] <- toJSON(newSciList)
 }
 
-sciList <- fromJSON(sciText)
-cat(toJSON(newSciList))
-cat(toJSON(sciList))
-
-# Comment once working
-#view(newSciList)
-#View(sciList) 
-identical(newSciList,sciList)
+# sciList <- fromJSON(sciText)
+# cat(toJSON(newSciList))
+# cat(toJSON(sciList))
+# 
+# # Comment once working
+# #view(newSciList)
+# #View(sciList) 
+# identical(newSciList,sciList)
 ```
 
 ## Sponsers Column
@@ -322,7 +328,7 @@ identical(newSciList,sciList)
 # This will always be NOAA SWFSC
 
 # Copy text from database 
-sponText <- '[{"name": "NOAA SWFSC", "uuid": "918a8687-8b33-4f70-b550-79a5273866fa"}]'
+#sponText <- '[{"name": "NOAA SWFSC", "uuid": "918a8687-8b33-4f70-b550-79a5273866fa"}]'
 
 for (i in 1:nrow(dd)) {
   newSponList <- list(
@@ -335,23 +341,23 @@ for (i in 1:nrow(dd)) {
   dd$SPONSORS[i] <- toJSON(newSponList)
 }
 
-sponList <- fromJSON(sponText)
-cat(toJSON(newSponList))
-cat(toJSON(sponList))
-
-# Comment once working
-#view(newSponList)
-#View(sponList) 
-identical(newSponList,sponList)
+# sponList <- fromJSON(sponText)
+# cat(toJSON(newSponList))
+# cat(toJSON(sponList))
+# 
+# # Comment once working
+# #view(newSponList)
+# #View(sponList) 
+# identical(newSponList,sponList)
 ```
 
 ## Funders Column
 
 ```{r}
-# This will always be NOAA SWFSC
+# For ADRIFT, this will always be NOAA SWFSC, BOEM, & ...
 
 # Copy text from database 
-funText <- '[{"name": "NOAA SWFSC", "uuid": "918a8687-8b33-4f70-b550-79a5273866fa"}, {"name": "BOEM", "uuid": "fee4d17a-a7dd-4f13-ade5-817b4f1fc86d"}, {"name": "US Navy Pacific Fleet Environmental Readiness Division", "uuid": "d246d0dc-b74b-4dc3-8d27-bdbb28b3e009"}]'
+#funText <- '[{"name": "NOAA SWFSC", "uuid": "918a8687-8b33-4f70-b550-79a5273866fa"}, {"name": "BOEM", "uuid": "fee4d17a-a7dd-4f13-ade5-817b4f1fc86d"}, {"name": "US Navy Pacific Fleet Environmental Readiness Division", "uuid": "d246d0dc-b74b-4dc3-8d27-bdbb28b3e009"}]'
 
 for (i in 1:nrow(dd)) {
   newFunList <- list(
@@ -362,104 +368,100 @@ for (i in 1:nrow(dd)) {
     list(
       'name' = 'BOEM',
       'uuid' = 'fee4d17a-a7dd-4f13-ade5-817b4f1fc86d'
-    ),
-    list(
-      'name' = 'US Navy Pacific Fleet Environmental Readiness Division',
-      'uuid' = 'd246d0dc-b74b-4dc3-8d27-bdbb28b3e009'
     )
   )
 
   dd$FUNDERS[i] <- toJSON(newFunList)
 }
 
-funList <- fromJSON(funText)
-cat(toJSON(newFunList))
-cat(toJSON(funList))
-
-# Comment once working
-#view(newFunList)
-#View(funList) 
-identical(newFunList,funList)
+# funList <- fromJSON(funText)
+# cat(toJSON(newFunList))
+# cat(toJSON(funList))
+# 
+# # Comment once working
+# #view(newFunList)
+# #View(funList) 
+# identical(newFunList,funList)
 ```
 
-## Sensors Column
+## TO DO - Sensors Column
 
 ```{r}
-# A lot of this data has to come from the calibration sheet 
-# For CCES, all calibration info is in 'CCES2018_CalibrationInfo.csv'
-# For PASCAL, make spreadsheet from report
-# For ADRIFT, use inventory spreadsheets
-
-# read in data from calibration info spreadsheet
-calInfo <- read.csv("Calibration Files/CCES2018_CalibrationInfo.csv")
-
-# Copy text from database 
-senText <- '{"0": {"type": "Audio Sensor", "number": "1", "id": "856048", "name": "HTI-92-WB", "pos_x": "", "pos_y": "", "pos_z": "-100", "value_1": "856048", "value_2": "", "description": ""}, "1": {"type": "Audio Sensor", "number": "2", "id": "856059", "name": "HTI-96-min", "pos_x": "", "pos_y": "", "pos_z": "-105", "value_1": "856059", "value_2": "", "description": ""}, "2": {"type": "Depth Sensor", "number": "3", "id": "NA", "name": "NA", "pos_x": "", "pos_y": "", "pos_z": "-100", "value_1": "", "value_2": "", "description": ""}, "3": {"type": "Other Sensor", "number": "4", "id": "A/B", "name": "SPOT", "pos_x": "", "pos_y": "", "pos_z": "+1", "value_1": "GPS", "value_2": "", "description": "2 SPOT sattelite GPS sensors"}}'
-
-for(i in 1:nrow(dd)) {
-#  for (i in 1) {
-  newSenList <- list(
-    '0' = list(
-      'type' = 'Audio Sensor',
-      'number' = '1',
-      'id' = as.character(calInfo$SerialNumber_1[i]),
-      'name' = calInfo$HydrophoneType_1[i],
-      'pos_x' = '', 
-      'pos_y' = '',
-      'pos_z' = '-100', 
-      'value_1' = as.character(calInfo$SerialNumber_1[i]),
-      'value_2' = '',
-      'description' = ''
-    ),
-    '1' = list(
-      'type' = 'Audio Sensor',
-      'number' = '2',
-      'id' = as.character(calInfo$SerialNumber_2[i]),
-      'name' = calInfo$HydrophoneType_2[i],
-      'pos_x' = '', 
-      'pos_y' = '',
-      'pos_z' = '-105', 
-      'value_1' = as.character(calInfo$SerialNumber_2[i]),
-      'value_2' = '',
-      'description' = ''
-    ),
-    '2' = list(
-      'type' = 'Depth Sensor',
-      'number' = '3',
-      'id' = deployDetails$Depth_Sensor[i],
-      'name' = deployDetails$DepthSensorType[i],
-      'pos_x' = '', 
-      'pos_y' = '',
-      'pos_z' = '-100', 
-      'value_1' = '',
-      'value_2' = '',
-      'description' = ''
-    ),
-    '3' = list(
-      'type' = 'Other Sensor',
-      'number' = '4',
-      'id' = deployDetails$GPS_ID[i],
-      'name' = deployDetails$GPS_Tracker[i],
-      'pos_x' = '', 
-      'pos_y' = '',
-      'pos_z' = '+1', 
-      'value_1' = 'GPS',
-      'value_2' = '',
-      'description' = '2 SPOT sattelite GPS sensors'
-    )
-  )
-    
-dd$SENSORS[i] <- toJSON(newSenList)
-}
-
-senList <- fromJSON(senText)
-cat(toJSON(newSenList))
-cat(toJSON(senList))
-
-# Comment once working
-#view(newSenList)
-#View(senList) 
-identical(newSenList,senList)
+# # A lot of this data has to come from the calibration sheet 
+# # For CCES, all calibration info is in 'CCES2018_CalibrationInfo.csv'
+# # For PASCAL, make spreadsheet from report
+# # For ADRIFT, use inventory spreadsheets
+# 
+# # read in data from calibration info spreadsheet
+# calInfo <- read.csv("Calibration Files/CCES2018_CalibrationInfo.csv")
+# 
+# # Copy text from database 
+# senText <- '{"0": {"type": "Audio Sensor", "number": "1", "id": "856048", "name": "HTI-92-WB", "pos_x": "", "pos_y": "", "pos_z": "-100", "value_1": "856048", "value_2": "", "description": ""}, "1": {"type": "Audio Sensor", "number": "2", "id": "856059", "name": "HTI-96-min", "pos_x": "", "pos_y": "", "pos_z": "-105", "value_1": "856059", "value_2": "", "description": ""}, "2": {"type": "Depth Sensor", "number": "3", "id": "NA", "name": "NA", "pos_x": "", "pos_y": "", "pos_z": "-100", "value_1": "", "value_2": "", "description": ""}, "3": {"type": "Other Sensor", "number": "4", "id": "A/B", "name": "SPOT", "pos_x": "", "pos_y": "", "pos_z": "+1", "value_1": "GPS", "value_2": "", "description": "2 SPOT sattelite GPS sensors"}}'
+# 
+# for(i in 1:nrow(dd)) {
+# #  for (i in 1) {
+#   newSenList <- list(
+#     '0' = list(
+#       'type' = 'Audio Sensor',
+#       'number' = '1',
+#       'id' = as.character(calInfo$SerialNumber_1[i]),
+#       'name' = calInfo$HydrophoneType_1[i],
+#       'pos_x' = '', 
+#       'pos_y' = '',
+#       'pos_z' = '-100', 
+#       'value_1' = as.character(calInfo$SerialNumber_1[i]),
+#       'value_2' = '',
+#       'description' = ''
+#     ),
+#     '1' = list(
+#       'type' = 'Audio Sensor',
+#       'number' = '2',
+#       'id' = as.character(calInfo$SerialNumber_2[i]),
+#       'name' = calInfo$HydrophoneType_2[i],
+#       'pos_x' = '', 
+#       'pos_y' = '',
+#       'pos_z' = '-105', 
+#       'value_1' = as.character(calInfo$SerialNumber_2[i]),
+#       'value_2' = '',
+#       'description' = ''
+#     ),
+#     '2' = list(
+#       'type' = 'Depth Sensor',
+#       'number' = '3',
+#       'id' = deployDetails$Depth_Sensor[i],
+#       'name' = deployDetails$DepthSensorType[i],
+#       'pos_x' = '', 
+#       'pos_y' = '',
+#       'pos_z' = '-100', 
+#       'value_1' = '',
+#       'value_2' = '',
+#       'description' = ''
+#     ),
+#     '3' = list(
+#       'type' = 'Other Sensor',
+#       'number' = '4',
+#       'id' = deployDetails$GPS_ID[i],
+#       'name' = deployDetails$GPS_Tracker[i],
+#       'pos_x' = '', 
+#       'pos_y' = '',
+#       'pos_z' = '+1', 
+#       'value_1' = 'GPS',
+#       'value_2' = '',
+#       'description' = '2 SPOT sattelite GPS sensors'
+#     )
+#   )
+#     
+# dd$SENSORS[i] <- toJSON(newSenList)
+# }
+# 
+# senList <- fromJSON(senText)
+# cat(toJSON(newSenList))
+# cat(toJSON(senList))
+# 
+# # Comment once working
+# #view(newSenList)
+# #View(senList) 
+# identical(newSenList,senList)
 ```
 
 ## Deployment Details Column
@@ -471,7 +473,7 @@ for(i in 1:nrow(dd)) {
       'DEPLOY_TYPE' = 'Mobile Marine',
       'SEA_AREA' = 'North Pacific Ocean',
       'DEPLOY_SHIP' = deployDetails$Deploy_Vessel[i],
-      'FILES' = paste('Z:/METADATA/CCES_2018/',deployDetails$Data_ID[i],'/',deployDetails$Data_ID[i],'_GPS/',deployDetails$Data_ID[i],'_GPS.csv', sep = ""),
+      'FILES' = paste('Z:/METADATA/ADRIFT/',deployDetails$Data_ID[i],'/',deployDetails$Data_ID[i],'_GPS/',deployDetails$Data_ID[i],'_GPS.csv', sep = ""),
       'POSITION_DETAILS' = 'Satellite gps'
     )
     
@@ -480,44 +482,44 @@ dd$DEPLOYMENT_DETAILS[i] <- toJSON(newDdList)
 
 
 # Copy text from database 
-ddText <- '{"DEPLOY_TYPE": "Mobile Marine","SEA_AREA": "North Pacific Ocean","DEPLOY_SHIP": "R/V Ruben Lasker","FILES":"Z:/METADATA/CCES_2018/CCES_023/CCES_023_GPS/CCES_023_GPS.csv","POSITION_DETAILS": "Satellite gps"}'
+#ddText <- '{"DEPLOY_TYPE": "Mobile Marine","SEA_AREA": "North Pacific Ocean","DEPLOY_SHIP": "R/V Ruben Lasker","FILES":"Z:/METADATA/CCES_2018/CCES_023/CCES_023_GPS/CCES_023_GPS.csv","POSITION_DETAILS": "Satellite gps"}'
 
-ddList <- fromJSON(ddText)
-cat(toJSON(newDdList))
-cat(toJSON(ddList))
-
-# Comment once working
-#view(newDdList)
-#View(ddList) 
-identical(newDdList,ddList)
+# ddList <- fromJSON(ddText)
+# cat(toJSON(newDdList))
+# cat(toJSON(ddList))
+# 
+# # Comment once working
+# #view(newDdList)
+# #View(ddList) 
+# identical(newDdList,ddList)
 ```
 
-## Calibration info column
+## TO DO - Calibration info column
 
 ```{r}
 for(i in 1:nrow(dd)) {
   newCalList <- list(
     'CAL_STATE' = 'Factory Calibrated',
-    'CAL_DOCS_PATH' = 'C:/Users/kourtney.burger/Documents/GitHub/ADRIFT-Deployment-PassivePacker/Calibration info', 
+    'CAL_DOCS_PATH' = '', 
     'SENSITIVITY' = '',
     'FREQUENCY' = '',
     'GAIN' = '',
-    'COMMENT' = 'This dataset is composed of multichannel recorders with different types of hydrophones, each with its own unique sensitivity and frequency range. For the detailed calibration information refer to the CCES2018_CalibrationInfo.csv spreadsheet.'
+    'COMMENT' = 'This dataset is composed of multichannel recorders with different types of hydrophones, each with its own unique sensitivity and frequency range. For the detailed calibration information refer to the ADRIFT_CalibrationInfo.csv spreadsheet.'
     )
 dd$CALIBRATION_INFO[i] <- toJSON(newCalList)
 }
 
 # Copy text from database 
-calText <- '{"CAL_STATE": "Factory Calibrated", "CAL_DOCS_PATH": "C:/Users/kourtney.burger/Documents/GitHub/ADRIFT-Deployment-PassivePacker/Calibration info", "SENSITIVITY": "", "FREQUENCY": "", "GAIN": "", "COMMENT": "This dataset is composed of multichannel recorders with different types of hydrophones, each with its own unique sensitivity and frequency range. For the detailed calibration information refer to the CCES2018_CalibrationInfo.csv spreadsheet."}'
+#calText <- '{"CAL_STATE": "Factory Calibrated", "CAL_DOCS_PATH": "C:/Users/kourtney.burger/Documents/GitHub/ADRIFT-Deployment-PassivePacker/Calibration info", "SENSITIVITY": "", "FREQUENCY": "", "GAIN": "", "COMMENT": "This dataset is composed of multichannel recorders with different types of hydrophones, each with its own unique sensitivity and frequency range. For the detailed calibration information refer to the CCES2018_CalibrationInfo.csv spreadsheet."}'
 
-calList <- fromJSON(calText)
-cat(toJSON(newCalList))
-cat(toJSON(calList))
-
-# comment once working
-#view(newCalList)
-#View(calList) 
-identical(newCalList,calList)
+# calList <- fromJSON(calText)
+# cat(toJSON(newCalList))
+# cat(toJSON(calList))
+# 
+# # comment once working
+# #view(newCalList)
+# #View(calList) 
+# identical(newCalList,calList)
 ```
 
 ## Dataset info column
@@ -543,16 +545,16 @@ dd$DATASET_INFO[i] <- toJSON(newDiList)
 
 # Copy text from database 
 # Copy text from database 
-diText <- '{"TYPE": "Raw","SUB_TYPE": "Audio","PLATFORM": "Drifter","INSTRUMENT_TYPE": "SoundTrap 4300 HF","INSTRUMENT_ID": "1208791071","DEPLOYMENT_TIME": "2018-11-22T08:10:00","RECOVERY_TIME": "2018-12-03T00:25:00","AUDIO_START": "2018-11-22T08:28:24","AUDIO_END": "2018-12-03T00:49:11","SOURCE_PATH":"F:/CCES_RawData/manipulated/audio/CCES_023","DATA_COMMENT": "no depth data, Low frequency strumming and knocking under 50 Hz, ship noise under 250 Hz"}'
+#diText <- '{"TYPE": "Raw","SUB_TYPE": "Audio","PLATFORM": "Drifter","INSTRUMENT_TYPE": "SoundTrap 4300 HF","INSTRUMENT_ID": "1208791071","DEPLOYMENT_TIME": "2018-11-22T08:10:00","RECOVERY_TIME": "2018-12-03T00:25:00","AUDIO_START": "2018-11-22T08:28:24","AUDIO_END": "2018-12-03T00:49:11","SOURCE_PATH":"F:/CCES_RawData/manipulated/audio/CCES_023","DATA_COMMENT": "no depth data, Low frequency strumming and knocking under 50 Hz, ship noise under 250 Hz"}'
 
-diList <- fromJSON(diText)
-cat(toJSON(newDiList))
-cat(toJSON(diList))
-
-# comment once working
-#view(newDiList)
-#View(diList) #comment once running full loop
-identical(newDiList,diList)
+# diList <- fromJSON(diText)
+# cat(toJSON(newDiList))
+# cat(toJSON(diList))
+# 
+# # comment once working
+# #view(newDiList)
+# #View(diList) #comment once running full loop
+# identical(newDiList,diList)
 ```
 
 ## Ancillary Info Column
@@ -561,30 +563,29 @@ identical(newDiList,diList)
 for(i in 1:nrow(dd)) {
   newAncilList <- list(
     'BIO_PATH' = "",
-    'OTHER_PATH' = paste('F:/CCES_RawData/manipulated/metadata/', deployDetails$Data_ID[i], sep = ""),
-    'TEMP_PATH' = paste('F:/CCES_RawData/manipulated/temp/', deployDetails$Data_ID[i], sep = "")
+    'OTHER_PATH' = paste('G:/ADRIFT_RawData/manipulated/metadata/', deployDetails$Data_ID[i], sep = ""),
+    'TEMP_PATH' = paste('G:/ADRIFT_RawData/manipulated/temp/', deployDetails$Data_ID[i], sep = "")
   )
 
 dd$ANCILLARY_INFO[i] <- toJSON(newAncilList)
 }
 
+#ancilText <- '{"BIO_PATH":"","OTHER_PATH":"F:/CCES_RawData/manipulated/metadata/CCES_023","TEMP_PATH":"F:/CCES_RawData/manipulated/temp/CCES_023"}'
 
-ancilText <- '{"BIO_PATH":"","OTHER_PATH":"F:/CCES_RawData/manipulated/metadata/CCES_023","TEMP_PATH":"F:/CCES_RawData/manipulated/temp/CCES_023"}'
-
-ancilList <- fromJSON(ancilText)
-cat(toJSON(newAncilList))
-cat(toJSON(ancilList))
-
-# comment once working
-#view(newAncilList)
-#View(ancilList) #comment once running full loop
-identical(newAncilList,ancilList)
+# ancilList <- fromJSON(ancilText)
+# cat(toJSON(newAncilList))
+# cat(toJSON(ancilList))
+# 
+# # comment once working
+# #view(newAncilList)
+# #View(ancilList) #comment once running full loop
+# identical(newAncilList,ancilList)
 ```
 
 # Append to passive packer table
 
 ```{r}
-con <- dbConnect(SQLite(), "PassivePacker_v.4.0.3-win64/database/packageData.sqlite")
+con <- dbConnect(SQLite(), here("PassivePacker_v.4.0.3-win64", "database", "packageData.sqlite"))
 dbAppendTable(con, 'DEPLOYMENT_DATA', dd)
 dbDisconnect(con)
 ```

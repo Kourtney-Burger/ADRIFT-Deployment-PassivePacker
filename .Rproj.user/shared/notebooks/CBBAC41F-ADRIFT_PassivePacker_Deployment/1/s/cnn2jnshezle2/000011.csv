@@ -1,0 +1,4 @@
+"0","#Create chief sci column"
+"0","deployDetails <- deployDetails %>%"
+"0","  separate(Personnel, c(""ChiefSci"", ""AdditionalPersonnel""), sep = "","", extra = ""merge"")"
+"2","Warning: Expected 2 pieces. Missing pieces filled with `NA` in 46 rows [1, 2, 4, 5, 15, 16, 17, 18, 23, 24, 25, 30, 31, 32, 33, 34, 35, 36, 37, 38, ...]."
