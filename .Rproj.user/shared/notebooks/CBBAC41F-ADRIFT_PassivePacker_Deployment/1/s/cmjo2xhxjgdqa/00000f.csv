@@ -2,6 +2,6 @@
 "0","deployDetails[deployDetails == ""ST640""] <- ""SoundTrap 640"""
 "0","deployDetails[deployDetails == ""ST4300HF""] <- ""SoundTrap 4300 High Frequency"""
 "0","deployDetails[deployDetails == ""ST300""] <- ""SoundTrap 300"""
-"0","deployDetails[deployDetails == ""ST4300""] <- ""SoundTrap 4300"""
+"0","deployDetails[deployDetails == ""ST4300STD""] <- ""SoundTrap 4300"""
 "0","deployDetails[deployDetails == ""ST500HF""] <- ""SoundTrap 500 High Frequency"""
 "0","deployDetails[deployDetails == ""ST300HF""] <- ""SoundTrap 300 High Frequency"""

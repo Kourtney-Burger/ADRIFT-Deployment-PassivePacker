@@ -1,0 +1,5 @@
+"0","  # Copy list of files to new directory 
+  file.copy(currentTemp, newTemp)
+"
+"1","logical(0)
+"

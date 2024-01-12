@@ -1,0 +1,5 @@
+"0","# Add Publication Date
+dd$PUBLICATION_DATE <- Date(dd$PUBLICATION_DATE)
+"
+"2","Error in rep.int(NA_real_, length) : invalid 'times' value
+"
