@@ -1,0 +1,47 @@
+---
+title: "Fix public release date"
+output: html_document
+date: "2024-01-18"
+---
+```{r}
+library(here)
+library(DBI)
+deployDetails <- read.csv(here("DeploymentDetailsFiles","ADRIFT_DeploymentDetails.csv"))
+```
+
+
+Read in passive packer table 
+```{r}
+DepDir <- here('ADRIFT-Deployment-PassivePacker')
+
+
+db <- dbConnect(SQLite(), here("PassivePacker_v.4.0.3-win64", "database", "packageData.sqlite"))
+ppdt <- dbReadTable(db, "DEPLOYMENT_DATA")
+dbDisconnect(db)
+```
+
+
+ADRIFT Public Release Date
+```{r}
+ppdt$PUBLICATION_DATE[is.na(ppdt$PUBLICATION_DATE)] <- '2023-01-18'
+
+for (i in 1:nrow(ppdt)) {
+  oldpubDate <- ppdt$PUBLICATION_DATE[i]
+  
+  oldpubDate <- as.Date(oldpubDate)
+  
+  pubDate <- oldpubDate %m+% years(1)
+   
+  pubDate <- as.character(pubDate)
+  
+  ppdt$PUBLICATION_DATE[i] <- pubDate
+}
+```
+
+
+```{r}
+con <- dbConnect(SQLite(), here("PassivePacker_v.4.0.3-win64", "database", "packageData.sqlite"))
+dbAppendTable(con, 'DEPLOYMENT_DATA', ppdt)
+dbDisconnect(con)
+```
+

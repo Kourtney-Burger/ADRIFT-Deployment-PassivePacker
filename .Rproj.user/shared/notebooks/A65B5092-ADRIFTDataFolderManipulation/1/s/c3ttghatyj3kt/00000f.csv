@@ -1,0 +1,6 @@
+"0","deployDetails <- read.csv(""~/GitHub/ADRIFT-Deployment-PassivePacker/DeploymentDetailsFiles/ADRIFT_DeploymentDetails.csv"")
+"
+"2","Warning message:
+"
+"2","R graphics engine version 16 is not supported by this version of RStudio. The Plots tab will be disabled until a newer version of RStudio is installed. 
+"

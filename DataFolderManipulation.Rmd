@@ -6,7 +6,7 @@ date: "2023-10-24"
 # Read in Deployment Details spreadsheet
 This will only be used for identifying drift IDs for loops below
 ```{r}
-deployDetails <- read.csv("DeploymentDetails Files/CCES_DeploymentDetails.csv")
+deployDetails <- read.csv("~/GitHub/ADRIFT-Deployment-PassivePacker/DeploymentDetailsFiles/CCES_DeploymentDetails.csv")
 ```
 
 
@@ -18,6 +18,7 @@ dir.create(file.path('F:/CCES_RawData/manipulated'))
 dir.create(file.path('F:/CCES_RawData/manipulated/audio'))
 dir.create(file.path('F:/CCES_RawData/manipulated/temp'))
 dir.create(file.path('F:/CCES_RawData/manipulated/metadata'))
+dir.create(file.path('F:/CCES_RawData/manipulated/gps'))
 ```
 
 
@@ -87,7 +88,7 @@ close(pb) # Close the connection
 
 
 ## Path to additional files 
-All additional metadata (accelerometer, depth, soundtrap logs)
+All additional metadata (accelerometer, depth, soundtrap logs, noise logs)
 ```{r}
 # Set up progress bar
 pb <- txtProgressBar(min = 0,      # Minimum value of the progress bar
@@ -101,57 +102,48 @@ for (i in 1:nrow(deployDetails)) {
   dir.create(file.path(paste('F:/CCES_RawData/manipulated/metadata/',
                              deployDetails$Data_ID[i], sep = "")))
   
-  # #Accelerometer
-  #   # List of files I want to move  
-  #   currentAccel <- list.files(paste('Z:/RECORDINGS/DRIFTERS/CCES_2018/RAW/',
-  #                                    deployDetails$Data_ID[i], sep = ""), 
-  #                              pattern = "\\.accel.csv$", full.names = T)
-  #                                    
-  #   # Create folder/directory to move the list above to
-  #   dir.create(file.path(paste('F:/CCES_RawData/manipulated/metadata/',
-  #                              deployDetails$Data_ID[i],'/accel', sep = "")))
-  #   newAccel <- file.path(paste('F:/CCES_RawData/manipulated/metadata/',
-  #                               deployDetails$Data_ID[i],'/accel', sep = ""))
-  #   # Copy list of files to new directory 
-  #   file.copy(currentAccel, newAccel)
-  # 
-  # #Depth
-  #   # List of files I want to move
-  #   currentDepth <- list.files(paste('Z:/METADATA/', deployDetails$Data_ID[i],'/',
-  #                                    deployDetails$Data_ID[i],'_DEPTH', sep = ""), 
-  #                              pattern = "\\.csv$", full.names = T)
-  #   # Create folder/directory to move the list above to
-  #   dir.create(file.path(paste('F:/CCES_RawData/manipulated/metadata/',
-  #                              deployDetails$Data_ID[i],'/depth', sep = "")))
-  #   newDepth <- file.path(paste('F:/CCES_RawData/manipulated/metadata/',
-  #                               deployDetails$Data_ID[i],'/depth', sep = ""))
-  #   # Copy list of files to new directory 
-  #   file.copy(currentDepth, newDepth)
-  # 
-  # #Logs
-  #   # List of files I want to move
-  #   currentLogs <- list.files(paste('Z:/RECORDINGS/DRIFTERS/CCES_2018/RAW/',
-  #                                   deployDetails$Data_ID[i], sep = ""), 
-  #                             pattern = "\\.log.xml$", full.names = T)
-  #   # Create folder/directory to move the list above to
-  #   dir.create(file.path(paste('F:/CCES_RawData/manipulated/metadata/',
-  #                              deployDetails$Data_ID[i], '/logs', sep = "")))
-  #   newLogs <- file.path(paste('F:/CCES_RawData/manipulated/metadata/',
-  #                              deployDetails$Data_ID[i], '/logs', sep = ""))
-  #   # Copy list of files to new directory 
-  #   file.copy(currentLogs, newLogs)
-  #   
-  # #Calibration File
-  #   # List of files I want to move
-  #   currentCal <- list.files('~/GitHub/ADRIFT-Deployment-PassivePacker/Calibration Files', 
-  #                            full.names = T)
-  #   # Create folder/directory to move the list above to
-  #   dir.create(file.path(paste('F:/CCES_RawData/manipulated/metadata/',
-  #                              deployDetails$Data_ID[i], '/calibration', sep = "")))
-  #   newCal <- file.path(paste('F:/CCES_RawData/manipulated/metadata/',
-  #                              deployDetails$Data_ID[i], '/calibration', sep = ""))
-  #   # Copy list of files to new directory 
-  #   file.copy(currentCal, newCal)
+  #Accelerometer
+    # List of files I want to move
+    currentAccel <- list.files(paste('Z:/RECORDINGS/DRIFTERS/CCES_2018/RAW/',
+                                     deployDetails$Data_ID[i], sep = ""),
+                               pattern = "\\.accel.csv$", full.names = T)
+
+    # Create folder/directory to move the list above to
+    dir.create(file.path(paste('F:/CCES_RawData/manipulated/metadata/',
+                               deployDetails$Data_ID[i],'/accel', sep = "")))
+    newAccel <- file.path(paste('F:/CCES_RawData/manipulated/metadata/',
+                                deployDetails$Data_ID[i],'/accel', sep = ""))
+    # Copy list of files to new directory
+    file.copy(currentAccel, newAccel)
+
+    
+  #Depth
+    # List of files I want to move
+    currentDepth <- list.files(paste('Z:/METADATA/', deployDetails$Data_ID[i],'/',
+                                     deployDetails$Data_ID[i],'_DEPTH', sep = ""),
+                               pattern = "\\.csv$", full.names = T)
+    # Create folder/directory to move the list above to
+    dir.create(file.path(paste('F:/CCES_RawData/manipulated/metadata/',
+                               deployDetails$Data_ID[i],'/depth', sep = "")))
+    newDepth <- file.path(paste('F:/CCES_RawData/manipulated/metadata/',
+                                deployDetails$Data_ID[i],'/depth', sep = ""))
+    # Copy list of files to new directory
+    file.copy(currentDepth, newDepth)
+
+    
+  #Logs
+    # List of files I want to move
+    currentLogs <- list.files(paste('Z:/RECORDINGS/DRIFTERS/CCES_2018/RAW/',
+                                    deployDetails$Data_ID[i], sep = ""),
+                              pattern = "\\.log.xml$", full.names = T)
+    # Create folder/directory to move the list above to
+    dir.create(file.path(paste('F:/CCES_RawData/manipulated/metadata/',
+                               deployDetails$Data_ID[i], '/logs', sep = "")))
+    newLogs <- file.path(paste('F:/CCES_RawData/manipulated/metadata/',
+                               deployDetails$Data_ID[i], '/logs', sep = ""))
+    # Copy list of files to new directory
+    file.copy(currentLogs, newLogs)
+
     
   #Noise logs
     # List of files I want to move
@@ -165,6 +157,20 @@ for (i in 1:nrow(deployDetails)) {
                                deployDetails$Data_ID[i], '/NoiseLogs', sep = ""))
     # Copy list of files to new directory 
     file.copy(currentNoise, newNoise)    
+    
+    
+  # GPS Files
+    # List of files I want to move
+    currentGPS <- list.files(paste('Z:METADATA/CCES_2018/',deployDetails$Data_ID[i],
+                                   '/',deployDetails$Data_ID[i],'_GPS', sep = ""),
+                               pattern = "\\_GPS.csv$", full.names = T)
+    #Create folder/directory to move the list above to
+    dir.create(file.path(paste('F:/CCES_RawData/manipulated/gps/', 
+                             deployDetails$Data_ID[i], sep = "")))
+    newGPS <- file.path(paste('F:/CCES_RawData/manipulated/gps/', 
+                             deployDetails$Data_ID[i], sep = ""))
+    # Copy list of files to new directory
+    file.copy(currentGPS, newGPS)
     
     
   # Sets the progress bar to the current state

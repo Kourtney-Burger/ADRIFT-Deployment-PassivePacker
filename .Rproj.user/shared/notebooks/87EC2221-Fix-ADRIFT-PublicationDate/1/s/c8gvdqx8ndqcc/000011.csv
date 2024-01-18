@@ -1,0 +1,7 @@
+"0","con <- dbConnect(SQLite(), here(""PassivePacker_v.4.0.3-win64"", ""database"", ""packageData.sqlite""))"
+"0","dbAppendTable(con, 'DEPLOYMENT_DATA', ppdt)"
+"1","[1]"
+"1"," 108"
+"1","
+"
+"0","dbDisconnect(con)"

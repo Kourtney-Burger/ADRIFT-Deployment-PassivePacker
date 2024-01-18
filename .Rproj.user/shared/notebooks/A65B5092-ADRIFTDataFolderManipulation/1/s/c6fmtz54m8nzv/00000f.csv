@@ -1,7 +1,0 @@
-"0","    # Copy list of files to new directory
-    file.copy(currentGPS, newGPS)
-"
-"1","[1]"
-"1"," TRUE"
-"1","
-"
