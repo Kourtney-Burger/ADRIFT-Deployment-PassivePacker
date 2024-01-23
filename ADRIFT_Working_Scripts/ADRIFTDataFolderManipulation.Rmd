@@ -23,66 +23,66 @@ dir.create(file.path('G:/ADRIFT_RawData/manipulated/metadata'))
 
 # Audio Files - Move from DON to audio subfolder
 ```{r}
-# # Set up progress bar
-# pb <- txtProgressBar(min = 0,      # Minimum value of the progress bar
-#                      max = nrow(deployDetails), # Maximum value of the progress bar
-#                      style = 3,    # Progress bar style (also available style = 1 and style = 2)
-#                      width = 50,   # Progress bar width. Defaults to getOption("width")
-#                      char = "=")   # Character used to create the bar
-# 
-# # Start loop
-# for (i in 1:nrow(deployDetails)) {
-#   # List of files I want to move
-#   currentAudio <- list.files(paste('Z:/RECORDINGS/DRIFTERS/ADRIFT/RAW/',deployDetails$Data_ID[97], 
-#                                    '_CENSOR', sep = ""), pattern = "\\.wav$", full.names = T)
-# 
-#   # Create folder/directory to move the list above to
-#   dir.create(file.path(paste('G:/ADRIFT_RawData/manipulated/audio/',
-#                              deployDetails$Data_ID[97], sep = "")))
-#   newAudio <- file.path(paste('G:/ADRIFT_RawData/manipulated/audio/',
-#                               deployDetails$Data_ID[97], sep = ""))
-# 
-#   # Copy list of files to new directory 
-#   file.copy(currentAudio, newAudio)
-#   
-#   # Sets the progress bar to the current state
-#   setTxtProgressBar(pb, i)
-# }
-# 
-# close(pb) # Close the connection
+# Set up progress bar
+pb <- txtProgressBar(min = 0,      # Minimum value of the progress bar
+                     max = nrow(deployDetails), # Maximum value of the progress bar
+                     style = 3,    # Progress bar style (also available style = 1 and style = 2)
+                     width = 50,   # Progress bar width. Defaults to getOption("width")
+                     char = "=")   # Character used to create the bar
+
+# Start loop
+for (i in 1:nrow(deployDetails)) {
+  # List of files I want to move
+  currentAudio <- list.files(paste('Z:/RECORDINGS/DRIFTERS/ADRIFT/RAW/',deployDetails$Data_ID[i], 
+                                   '_CENSOR', sep = ""), pattern = "\\.wav$", full.names = T)
+
+  # Create folder/directory to move the list above to
+  dir.create(file.path(paste('G:/ADRIFT_RawData/manipulated/audio/',
+                             deployDetails$Data_ID[i], sep = "")))
+  newAudio <- file.path(paste('G:/ADRIFT_RawData/manipulated/audio/',
+                              deployDetails$Data_ID[i], sep = ""))
+
+  # Copy list of files to new directory 
+  file.copy(currentAudio, newAudio)
+  
+  # Sets the progress bar to the current state
+  setTxtProgressBar(pb, i)
+}
+
+close(pb) # Close the connection
 ```
 
 
 #Ancillary Data
 ## Temperature Data 
 ```{r}
-# # Set up progress bar
-# pb <- txtProgressBar(min = 0,      # Minimum value of the progress bar
-#                      max = nrow(deployDetails), # Maximum value of the progress bar
-#                      style = 3,    # Progress bar style (also available style = 1 and style = 2)
-#                      width = 50,   # Progress bar width. Defaults to getOption("width")
-#                      char = "=")   # Character used to create the bar
-# 
-# # Start loop
-# for (i in 1:nrow(deployDetails)) {
-#   # List of files I want to move
-#   currentTemp <- list.files(paste('Z:/RECORDINGS/DRIFTERS/ADRIFT/RAW/',deployDetails$Data_ID[97], 
-#                                    '_CENSOR', sep = ""), pattern = "\\.temp.csv$", full.names = T)
-# 
-#   # Create folder/directory to move the list above to
-#   dir.create(file.path(paste('G:/ADRIFT_RawData/manipulated/temp/',
-#                              deployDetails$Data_ID[97], sep = "")))
-#   newTemp <- file.path(paste('G:/ADRIFT_RawData/manipulated/temp/',
-#                              deployDetails$Data_ID[97], sep = ""))
-# 
-#   # Copy list of files to new directory 
-#   file.copy(currentTemp, newTemp)
-#   
-#   # Sets the progress bar to the current state
-#   setTxtProgressBar(pb, i)
-# }
-# 
-# close(pb) # Close the connection
+# Set up progress bar
+pb <- txtProgressBar(min = 0,      # Minimum value of the progress bar
+                     max = nrow(deployDetails), # Maximum value of the progress bar
+                     style = 3,    # Progress bar style (also available style = 1 and style = 2)
+                     width = 50,   # Progress bar width. Defaults to getOption("width")
+                     char = "=")   # Character used to create the bar
+
+# Start loop
+for (i in 1:nrow(deployDetails)) {
+  # List of files I want to move
+  currentTemp <- list.files(paste('Z:/RECORDINGS/DRIFTERS/ADRIFT/RAW/',deployDetails$Data_ID[i], 
+                                   '_CENSOR', sep = ""), pattern = "\\.temp.csv$", full.names = T)
+
+  # Create folder/directory to move the list above to
+  dir.create(file.path(paste('G:/ADRIFT_RawData/manipulated/temp/',
+                             deployDetails$Data_ID[i], sep = "")))
+  newTemp <- file.path(paste('G:/ADRIFT_RawData/manipulated/temp/',
+                             deployDetails$Data_ID[i], sep = ""))
+
+  # Copy list of files to new directory 
+  file.copy(currentTemp, newTemp)
+  
+  # Sets the progress bar to the current state
+  setTxtProgressBar(pb, i)
+}
+
+close(pb) # Close the connection
 ```
 
 
@@ -99,26 +99,26 @@ pb <- txtProgressBar(min = 0,      # Minimum value of the progress bar
 # Loop to create drift specific metadata folders with 3 folders within it (accelerometer, depth, soundtrap logs)
 for (i in 1:nrow(deployDetails)) {
   dir.create(file.path(paste('G:/ADRIFT_RawData/manipulated/metadata/',
-                            deployDetails$Data_ID[i], sep = "")))
-  # 
-  # 
-  # #Accelerometer
-  #   # List of files I want to move
-  #   currentAccel <- list.files(paste('Z:/RECORDINGS/DRIFTERS/ADRIFT/RAW/',
-  #                                    deployDetails$Data_ID[97], '_CENSOR', sep = ""),
-  #                              pattern = "\\.accel.csv$", full.names = T)
-  #   # Create folder/directory to move the list above to
-  #   dir.create(file.path(paste('G:/ADRIFT_RawData/manipulated/metadata/',
-  #                              deployDetails$Data_ID[97],'/accel', sep = "")))
-  #   newAccel <- file.path(paste('G:/ADRIFT_RawData/manipulated/metadata/',
-  #                               deployDetails$Data_ID[97],'/accel', sep = ""))
-  #   # Copy list of files to new directory
-  #   file.copy(currentAccel, newAccel)
+                             deployDetails$Data_ID[i], sep = "")))
+  
+  
+  #Accelerometer
+    # List of files I want to move
+    currentAccel <- list.files(paste('Z:/RECORDINGS/DRIFTERS/ADRIFT/RAW/',
+                                     deployDetails$Data_ID[i], '_CENSOR', sep = ""),
+                               pattern = "\\.accel.csv$", full.names = T)
+    # Create folder/directory to move the list above to
+    dir.create(file.path(paste('G:/ADRIFT_RawData/manipulated/metadata/',
+                               deployDetails$Data_ID[i],'/accel', sep = "")))
+    newAccel <- file.path(paste('G:/ADRIFT_RawData/manipulated/metadata/',
+                                deployDetails$Data_ID[i],'/accel', sep = ""))
+    # Copy list of files to new directory
+    file.copy(currentAccel, newAccel)
 
   #Depth
     # List of files I want to move
     currentDepth <- list.files(paste('Z:/METADATA/ADRIFT/', deployDetails$Data_ID[i],'/',
-                                     deployDetails$Data_ID[i],'_Depth_Sensus', sep = ""),
+                                     deployDetails$Data_ID[i],'_DEPTH_Sensus', sep = ""),
                                pattern = "\\Sensus.csv$", full.names = T)
     # Create folder/directory to move the list above to
     dir.create(file.path(paste('G:/ADRIFT_RawData/manipulated/metadata/',
@@ -128,36 +128,36 @@ for (i in 1:nrow(deployDetails)) {
     # Copy list of files to new directory
     file.copy(currentDepth, newDepth)
 
-  # #Logs
-  #   # List of files I want to move
-  #   currentLogs <- list.files(paste('Z:/RECORDINGS/DRIFTERS/ADRIFT/RAW/',
-  #                                   deployDetails$Data_ID[97], '_CENSOR',sep = ""),
-  #                             pattern = "\\.log.xml$", full.names = T)
-  #   # Create folder/directory to move the list above to
-  #   dir.create(file.path(paste('G:/ADRIFT_RawData/manipulated/metadata/',
-  #                              deployDetails$Data_ID[97], '/logs', sep = "")))
-  #   newLogs <- file.path(paste('G:/ADRIFT_RawData/manipulated/metadata/',
-  #                              deployDetails$Data_ID[97], '/logs', sep = ""))
-  #   # Copy list of files to new directory
-  #   file.copy(currentLogs, newLogs)
-  # 
-  # 
-  # #Noise logs
-  #   # List of files I want to move
-  #   currentNoise <- list.files(paste('Z:/RECORDINGS/DRIFTERS/ADRIFT/500Hz/', 
-  #                                    deployDetails$Data_ID[97], '_500Hz', sep = ""),
-  #                              pattern = "\\_Noise_Log.xls", full.names = T)
-  #   # Create folder/directory to move the list above to
-  #   dir.create(file.path(paste('G:/ADRIFT_RawData/manipulated/metadata/',
-  #                              deployDetails$Data_ID[97], '/NoiseLogs', sep = "")))
-  #   newNoise <- file.path(paste('G:/ADRIFT_RawData/manipulated/metadata/',
-  #                              deployDetails$Data_ID[97], '/NoiseLogs', sep = ""))
-  #   # Copy list of files to new directory 
-  #   file.copy(currentNoise, newNoise)    
-  #   
-  #   
-  # # Sets the progress bar to the current state
-  # setTxtProgressBar(pb, i)
+  #Logs
+    # List of files I want to move
+    currentLogs <- list.files(paste('Z:/RECORDINGS/DRIFTERS/ADRIFT/RAW/',
+                                    deployDetails$Data_ID[i], '_CENSOR',sep = ""),
+                              pattern = "\\.log.xml$", full.names = T)
+    # Create folder/directory to move the list above to
+    dir.create(file.path(paste('G:/ADRIFT_RawData/manipulated/metadata/',
+                               deployDetails$Data_ID[i], '/logs', sep = "")))
+    newLogs <- file.path(paste('G:/ADRIFT_RawData/manipulated/metadata/',
+                               deployDetails$Data_ID[i], '/logs', sep = ""))
+    # Copy list of files to new directory
+    file.copy(currentLogs, newLogs)
+
+
+  #Noise logs
+    # List of files I want to move
+    currentNoise <- list.files(paste('Z:/RECORDINGS/DRIFTERS/ADRIFT/500Hz/', 
+                                     deployDetails$Data_ID[i], '_500Hz', sep = ""),
+                               pattern = "\\_Noise_Log.xls", full.names = T)
+    # Create folder/directory to move the list above to
+    dir.create(file.path(paste('G:/ADRIFT_RawData/manipulated/metadata/',
+                               deployDetails$Data_ID[i], '/NoiseLogs', sep = "")))
+    newNoise <- file.path(paste('G:/ADRIFT_RawData/manipulated/metadata/',
+                               deployDetails$Data_ID[i], '/NoiseLogs', sep = ""))
+    # Copy list of files to new directory 
+    file.copy(currentNoise, newNoise)    
+    
+    
+  # Sets the progress bar to the current state
+  setTxtProgressBar(pb, i)
 }
 
 close(pb) # Close the connection
