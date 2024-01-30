@@ -502,7 +502,7 @@ for(i in 1:nrow(dd)) {
       'DEPLOY_TYPE' = 'Mobile Marine',
       'SEA_AREA' = 'North Pacific Ocean',
       'DEPLOY_SHIP' = deployDetails$Deploy.Vessel[i],
-      'FILES' = paste('G:/ADRIFT_RawData/manipulated/gps/',deployDetails$Data_ID[i],"/",deployDetails$Data_ID[i],'_GPS.csv', sep = ""),
+      'FILES' = paste('G:/ADRIFT_RawData/manipulated/gps/',deployDetails$Data_ID[i],"/",deployDetails$Data_ID[i],'_GPS.csv',', ','G:/ADRIFT_RawData/manipulated/gps/',deployDetails$Data_ID[i],'/',deployDetails$Data_ID[i],'_DeploymentDepth.csv', sep = ""),
       'POSITION_DETAILS' = ''
     )
     

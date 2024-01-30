@@ -116,12 +116,12 @@ for (i in 1:nrow(deployDetails)) {
     # Copy list of files to new directory
     file.copy(currentAccel, newAccel)
 
-    
+
   #Depth
     # List of files I want to move
-    currentDepth <- list.files(paste('Z:/METADATA/', deployDetails$Data_ID[i],'/',
+    currentDepth <- list.files(paste('Z:/METADATA/CCES_2018/', deployDetails$Data_ID[i],'/',
                                      deployDetails$Data_ID[i],'_DEPTH', sep = ""),
-                               pattern = "\\.csv$", full.names = T)
+                               pattern = "\\Depth.csv$", full.names = T)
     # Create folder/directory to move the list above to
     dir.create(file.path(paste('F:/CCES_RawData/manipulated/metadata/',
                                deployDetails$Data_ID[i],'/depth', sep = "")))
@@ -130,7 +130,7 @@ for (i in 1:nrow(deployDetails)) {
     # Copy list of files to new directory
     file.copy(currentDepth, newDepth)
 
-    
+
   #Logs
     # List of files I want to move
     currentLogs <- list.files(paste('Z:/RECORDINGS/DRIFTERS/CCES_2018/RAW/',
@@ -144,10 +144,10 @@ for (i in 1:nrow(deployDetails)) {
     # Copy list of files to new directory
     file.copy(currentLogs, newLogs)
 
-    
+
   #Noise logs
     # List of files I want to move
-    currentNoise <- list.files(paste('Z:/RECORDINGS/DRIFTERS/CCES_2018/500Hz/DRIFT_', 
+    currentNoise <- list.files(paste('Z:/RECORDINGS/DRIFTERS/CCES_2018/500Hz/DRIFT_',
                                      deployDetails$DeploymentID[i], '_500Hz', sep = ""),
                                pattern = "\\_Noise_Log.xls", full.names = T)
     # Create folder/directory to move the list above to
@@ -155,23 +155,26 @@ for (i in 1:nrow(deployDetails)) {
                                deployDetails$Data_ID[i], '/NoiseLogs', sep = "")))
     newNoise <- file.path(paste('F:/CCES_RawData/manipulated/metadata/',
                                deployDetails$Data_ID[i], '/NoiseLogs', sep = ""))
-    # Copy list of files to new directory 
-    file.copy(currentNoise, newNoise)    
-    
-    
+    # Copy list of files to new directory
+    file.copy(currentNoise, newNoise)
+
+
   # GPS Files
     # List of files I want to move
     currentGPS <- list.files(paste('Z:METADATA/CCES_2018/',deployDetails$Data_ID[i],
                                    '/',deployDetails$Data_ID[i],'_GPS', sep = ""),
                                pattern = "\\_GPS.csv$", full.names = T)
     #Create folder/directory to move the list above to
-    dir.create(file.path(paste('F:/CCES_RawData/manipulated/gps/', 
+    dir.create(file.path(paste('F:/CCES_RawData/manipulated/gps/',
                              deployDetails$Data_ID[i], sep = "")))
-    newGPS <- file.path(paste('F:/CCES_RawData/manipulated/gps/', 
+    newGPS <- file.path(paste('F:/CCES_RawData/manipulated/gps/',
                              deployDetails$Data_ID[i], sep = ""))
     # Copy list of files to new directory
     file.copy(currentGPS, newGPS)
-    
+
+  # Single depth document for location information for NCEI Passive Acoustic Data Viewer Map 
+    depthDoc <- data.frame(depth_m = deployDetails$Deployment_Depth_m.[i])
+    write.csv(depthDoc, paste('F:/CCES_RawData/manipulated/gps/',deployDetails$Data_ID[i],'/',deployDetails$Data_ID[i],'_DeploymentDepth.csv', sep = ""), row.names = FALSE)
     
   # Sets the progress bar to the current state
   setTxtProgressBar(pb, i)
