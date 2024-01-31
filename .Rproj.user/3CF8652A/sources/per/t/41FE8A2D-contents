@@ -460,7 +460,7 @@ for(i in 1:nrow(dd)) {
       'DEPLOY_TYPE' = 'Mobile Marine',
       'SEA_AREA' = 'North Pacific Ocean',
       'DEPLOY_SHIP' = deployDetails$Deploy_Vessel[i],
-      'FILES' = paste('F:/CCES_RawData/manipulated/gps/',deployDetails$Data_ID[i],'/',deployDetails$Data_ID[i],'_GPS.csv',', ','F:/CCES_RawData/manipulated/gps/',deployDetails$Data_ID[i],'/',deployDetails$Data_ID[i],'_DeploymentDepth.csv',sep = ""),
+      'FILES' = paste('F:/CCES_RawData/manipulated/gps/',deployDetails$Data_ID[i],'/',deployDetails$Data_ID[i],'_GPS.csv',',','F:/CCES_RawData/manipulated/gps/',deployDetails$Data_ID[i],'/',deployDetails$Data_ID[i],'_DeploymentDepth.csv',sep = ""),
       'POSITION_DETAILS' = 'Satellite gps'
     )
     

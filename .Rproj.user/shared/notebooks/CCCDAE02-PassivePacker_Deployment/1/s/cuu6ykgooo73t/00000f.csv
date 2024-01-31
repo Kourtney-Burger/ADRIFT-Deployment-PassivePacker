@@ -4,7 +4,7 @@
 "0","      'DEPLOY_TYPE' = 'Mobile Marine',"
 "0","      'SEA_AREA' = 'North Pacific Ocean',"
 "0","      'DEPLOY_SHIP' = deployDetails$Deploy_Vessel[i],"
-"0","      'FILES' = paste('F:/CCES_RawData/manipulated/gps/',deployDetails$Data_ID[i],'/',deployDetails$Data_ID[i],'_GPS.csv',', ','F:/CCES_RawData/manipulated/gps/',deployDetails$Data_ID[i],'/',deployDetails$Data_ID[i],'_DeploymentDepth.csv',sep = """"),"
+"0","      'FILES' = paste('F:/CCES_RawData/manipulated/gps/',deployDetails$Data_ID[i],'/',deployDetails$Data_ID[i],'_GPS.csv',',','F:/CCES_RawData/manipulated/gps/',deployDetails$Data_ID[i],'/',deployDetails$Data_ID[i],'_DeploymentDepth.csv',sep = """"),"
 "0","      'POSITION_DETAILS' = 'Satellite gps'"
 "0","    )"
 "0","    "
