@@ -1,0 +1,3 @@
+"0","#Create chief sci column"
+"0","deployDetails <- deployDetails %>%"
+"0","  separate(Personnel, c(""ChiefSci"", ""AdditionalPersonnel""), sep = "","", extra = ""merge"")"
