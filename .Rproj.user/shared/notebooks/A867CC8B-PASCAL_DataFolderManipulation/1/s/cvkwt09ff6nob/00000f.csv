@@ -1,0 +1,5 @@
+"0","dir.create(file.path('D:/PASCAL_RawData'))"
+"0","dir.create(file.path('D:/PASCAL_RawData/manipulated'))"
+"0","dir.create(file.path('D:/PASCAL_RawData/manipulated/audio'))"
+"0","dir.create(file.path('D:/PASCAL_RawData/manipulated/temp'))"
+"0","dir.create(file.path('D:/PASCAL_RawData/manipulated/metadata'))"

@@ -108,12 +108,6 @@ deployDetails$Deployment_Date <- as.POSIXct(deployDetails$Deployment_Date, forma
 deployDetails$Recovery_Date <- as.POSIXct(deployDetails$Recovery_Date, format = "%m/%d/%Y %H:%M", tz = 'UTC')
 ```
 
-```{r}
-#Create chief sci column
-deployDetails <- deployDetails %>%
-  separate(Personnel, c("ChiefSci", "AdditionalPersonnel"), sep = ",", extra = "merge")
-```
-
 
 ```{r}
 # Make all data characters
@@ -191,7 +185,7 @@ dd$PURPOSE <- 'The Passive Acoustics Survey of Cetacean Abundance Levels (PASCAL
 dd$ABSTRACT <- 'These data were primarily collected using Drifting Acoustic Spar Buoy Recorders (DASBRs), which were deployed at 20 pre-determined locations distributed uniformly throughout the California Current Study area offshore of the continental shelf. Each DASBR was composed of at least two hydrophones at 100 meter depth and an acoustic recorder (several drifts had more hydrophones and two recorders). While the primary species of interests were beaked whales, sperm whales, and Kogia, these data have been analyzed for acoustic presence of a wide variety of cetacean species as well as soundscape analysis.'
 
 # Set package destination (change to appropriate file path)  
-#dd$DESTINATION_PATH <- 'G:/Packaged Drifts'
+dd$DESTINATION_PATH <- 'D:/Packaged Drifts'
 ```
 
 # JSON Strings
@@ -307,19 +301,13 @@ dd$QUALITY_DETAILS[i] <- toJSON(newQdList)
 ## Scientists Column
 
 ```{r}
-# PASCAL - Shannon Rankin & Jennifer McCullough
-# CCES - Shannon Rankin and Anne Simonis
-# ADRIFT - Shannon Rankin & Chief sci from deployment details
+# PASCAL - Shannon Rankin
 
 for (i in 1:nrow(dd)) {
 # for(i in 64) {
   newSciList <- list(
     list(
       'name' = 'Shannon Rankin',
-      'uuid' = ''
-    ),
-    list(
-      'name' = deployDetails$ChiefSci[i],
       'uuid' = ''
     )
   )
@@ -547,7 +535,7 @@ for(i in 1:nrow(dd)) {
     'RECOVERY_TIME' = posixToText(deployDetails$Recovery_Date[i]),
     'AUDIO_START' = posixToText(deployDetails$Data_Start[i]),
     'AUDIO_END' = posixToText(deployDetails$Data_End[i]),
-    'SOURCE_PATH' =  paste('G:/ADRIFT_RawData/manipulated/audio/',deployDetails$Data_ID[i], sep = ""), 
+    'SOURCE_PATH' =  paste('D:/Packaged Drifts/EmptyAudio'), 
     'DATA_COMMENT' = deployDetails$Notes[i]
   )
 dd$DATASET_INFO[i] <- toJSON(newDiList)

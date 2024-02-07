@@ -1,0 +1,14 @@
+
+Drifts <- read.csv('')
+
+currentfiles <- list.files('D:\\ANALYSIS\\PG_ADRIFT\\ADRIFT_001\\TEST\\Binary_001_200Hz', full.names = T)
+
+dir.create(file.path('Z:\\ANALYSIS\\ADRIFT\\Fin_Whales\\Lizs_Analysis\\Binaries'))
+
+newlocation <- paste('Z:\\ANALYSIS\\ADRIFT\\Fin_Whales\\Lizs_Analysis\\Binaries\\',
+                     
+
+file.copy(from = currentfiles, to = newlocation, recursive = TRUE)
+
+
+copyDi
