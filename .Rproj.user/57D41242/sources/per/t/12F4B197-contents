@@ -264,8 +264,8 @@ for(i in 1:nrow(dd)) {
 for(i in 1:nrow(dd)) {
 #  for(i in 64) {
     newQdList <- list(
-      'analyst' = deployDetails$Quality_Analyst[i],
-      'analyst_uuid' = '',
+      'analyst' = 'Cory Hom-Weaver',
+      'analyst_uuid' = '8f9f3e13-3571-436d-b1fd-6e779acd9a9f',
       'quality_details' = list(
         list(
           'quality' = 'Good', #Setting default to 'good' rather than deployDetails$Quality_Category[i] because the quality low and high frequency in our spreadsheet is referring to the frequency range where the data is good
@@ -371,6 +371,10 @@ for (i in 1:nrow(dd)) {
     list(
       'name' = 'BOEM',
       'uuid' = 'fee4d17a-a7dd-4f13-ade5-817b4f1fc86d'
+    ),
+    list(
+      'name' = 'US Department of Interior',
+      'uuid' = 'a0111258-c83c-4a1e-92a1-3a41dae761b5'
     )
   )
 
@@ -391,13 +395,8 @@ for (i in 1:nrow(dd)) {
 ## Sensors Column
 
 ```{r}
-# A lot of this data has to come from the calibration sheet
-# For CCES, all calibration info is in 'CCES2018_CalibrationInfo.csv'
-# For PASCAL, make spreadsheet from report
-# For ADRIFT, all calibration info was pulled from the inventory and is in 'ADRIFT_CalibrationInfo.csv'
-
 # read in data from calibration info spreadsheet
-calInfo <- read.csv("~/GitHub/ADRIFT-Deployment-PassivePacker/Calibration Files/ADRIFT_CalibrationInfo.csv")
+calInfo <- read.csv("~/GitHub/ADRIFT-Deployment-PassivePacker/Calibration Files/PASCAL_HydrophoneSpecs.csv")
 
 for(i in 1:nrow(dd)) {
 #  for (i in 64) {
@@ -405,32 +404,32 @@ for(i in 1:nrow(dd)) {
     '0' = list(
       'type' = 'Audio Sensor',
       'number' = '1',
-      'id' = as.character(deployDetails$SensorNumber_1..hydrophone.serial.number.[i]),
-      'name' = calInfo$HydrophoneType_1[i],
+      'id' = as.character(deployDetails$SensorNumber_1[i]),
+      'name' = calInfo$Hydrophone.Type[calInfo$Serial.Number == deployDetails$SensorNumber_1[i]],
       'pos_x' = '',
       'pos_y' = '',
       'pos_z' = '-100',
-      'value_1' = as.character(deployDetails$SensorNumber_1..hydrophone.serial.number.[i]),
+      'value_1' = as.character(deployDetails$SensorNumber_1[i]),
       'value_2' = '',
       'description' = ''
     ),
     '1' = list(
       'type' = 'Audio Sensor',
       'number' = '2',
-      'id' = as.character(deployDetails$SensorNumber_2...hydrophone.serial.number.[i]),
-      'name' = calInfo$HydrophoneType_2[i],
+      'id' = as.character(deployDetails$SensorNumber_2[i]),
+      'name' =calInfo$Hydrophone.Type[calInfo$Serial.Number == deployDetails$SensorNumber_2[i]],
       'pos_x' = '',
       'pos_y' = '',
       'pos_z' = '-105',
-      'value_1' = as.character(deployDetails$SensorNumber_2...hydrophone.serial.number.[i]),
+      'value_1' = as.character(deployDetails$SensorNumber_2[i]),
       'value_2' = '',
       'description' = ''
     ),
     '2' = list(
       'type' = 'Depth Sensor',
       'number' = '3',
-      'id' = deployDetails$Depth.Sensor..serial.number.[i],
-      'name' = 'Sensus Ultra',
+      'id' = deployDetails$Depth_Sensor[i],
+      'name' = 'OpenTag',
       'pos_x' = '',
       'pos_y' = '',
       'pos_z' = '-100',
@@ -441,8 +440,8 @@ for(i in 1:nrow(dd)) {
     '3' = list(
       'type' = 'Other Sensor',
       'number' = '4',
-      'id' = deployDetails$GPS.ID..if.appropriate...top...bottom.[i],
-      'name' = deployDetails$GPS.Tracker[i],
+      'id' = deployDetails$GPS_ID[i],
+      'name' = deployDetails$Status.1[i],
       'pos_x' = '',
       'pos_y' = '',
       'pos_z' = '+1',
@@ -474,8 +473,8 @@ for(i in 1:nrow(dd)) {
     newDdList <- list(
       'DEPLOY_TYPE' = 'Mobile Marine',
       'SEA_AREA' = 'North Pacific Ocean',
-      'DEPLOY_SHIP' = deployDetails$Deploy.Vessel[i],
-      'FILES' = paste('G:/ADRIFT_RawData/manipulated/gps/',deployDetails$Data_ID[i],"/",deployDetails$Data_ID[i],'_GPS.csv',',','G:/ADRIFT_RawData/manipulated/gps/',deployDetails$Data_ID[i],'/',deployDetails$Data_ID[i],'_DeploymentDepth.csv', sep = ""),
+      'DEPLOY_SHIP' = deployDetails$Deploy_Vessel[i],
+#####      'FILES' = paste('', sep = ""),
       'POSITION_DETAILS' = ''
     )
     
@@ -500,11 +499,11 @@ dd$DEPLOYMENT_DETAILS[i] <- toJSON(newDdList)
 for(i in 1:nrow(dd)) {
   newCalList <- list(
     'CAL_STATE' = 'Factory Calibrated',
-    'CAL_DOCS_PATH' = paste("G:/ADRIFT_RawData/cal files"), 
+    'CAL_DOCS_PATH' = paste("D:/PASCAL_RawData/cal files"), 
     'SENSITIVITY' = '',
     'FREQUENCY' = '',
     'GAIN' = '',
-    'COMMENT' = 'This dataset is composed of multichannel recorders with different types of hydrophones, each with its own unique sensitivity and frequency range. For the detailed calibration information refer to the ADRIFT_CalibrationInfo.csv spreadsheet.'
+    'COMMENT' = 'This dataset is composed of multichannel recorders with different types of hydrophones, each with its own unique sensitivity and frequency range. For the detailed calibration information refer to the PASCAL_CalibrationInfo.xlsx spreadsheet.'
     )
 dd$CALIBRATION_INFO[i] <- toJSON(newCalList)
 }
