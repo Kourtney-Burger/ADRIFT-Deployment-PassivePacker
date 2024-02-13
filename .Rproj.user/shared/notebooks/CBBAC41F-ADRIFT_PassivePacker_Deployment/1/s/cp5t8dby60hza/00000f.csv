@@ -1,0 +1,6 @@
+"0","posixToText <- function(x) {"
+"0","    format(x, '%Y-%m-%dT%H:%M:%S')"
+"0","}"
+"0",""
+"0","#TEST"
+"0","#posixToText(as.POSIXct(""2018-11-22 08:28:24"", tz='UTC'))"
