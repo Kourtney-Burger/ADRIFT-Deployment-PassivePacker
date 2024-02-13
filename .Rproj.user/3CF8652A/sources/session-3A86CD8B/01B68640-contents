@@ -474,7 +474,7 @@ for(i in 1:nrow(dd)) {
       'DEPLOY_TYPE' = 'Mobile Marine',
       'SEA_AREA' = 'North Pacific Ocean',
       'DEPLOY_SHIP' = deployDetails$Deploy_Vessel[i],
-#####      'FILES' = paste('', sep = ""),
+      'FILES' = paste('D:/PASCAL_RawData/manipulated/gps/', deployDetails$Data_ID[i], "/", deployDetails$Data_ID[i], '_GPS.csv',',','D:/PASCAL_RawData/manipulated/gps/',deployDetails$Data_ID[i],'/',deployDetails$Data_ID[i],'_DeploymentDepth.csv', sep = ""),
       'POSITION_DETAILS' = ''
     )
     
@@ -558,8 +558,8 @@ for(i in 1:nrow(dd)) {
 #  for (i in 64) {
     newAncilList <- list(
     'BIO_PATH' = "",
-    'OTHER_PATH' = paste('G:/ADRIFT_RawData/manipulated/metadata/', deployDetails$Data_ID[i], sep = ""),
-    'TEMP_PATH' = paste('G:/ADRIFT_RawData/manipulated/temp/', deployDetails$Data_ID[i], sep = "")
+    'OTHER_PATH' = paste('D:/PASCAL_RawData/manipulated/metadata/', deployDetails$Data_ID[i], sep = ""),
+    'TEMP_PATH' = paste('D:/PASCAL_RawData/manipulated/temp/', deployDetails$Data_ID[i], sep = "")
   )
 
 dd$ANCILLARY_INFO[i] <- toJSON(newAncilList)
