@@ -3,7 +3,7 @@
     "path": "~/GitHub/ADRIFT-Deployment-PassivePacker/Soundscape Metrics/SoundscapeMetrics_PassivePacker.Rmd",
     "project_path": "Soundscape Metrics/SoundscapeMetrics_PassivePacker.Rmd",
     "type": "r_markdown",
-    "hash": "1477507729",
+    "hash": "2444985432",
     "contents": "",
     "dirty": false,
     "created": 1707857148251.0,
@@ -12,15 +12,16 @@
     "properties": {
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "381,1",
-        "scrollLine": "355"
+        "cursorPosition": "371,3",
+        "scrollLine": "351",
+        "docOutlineVisible": "1"
     },
     "folds": "",
-    "lastKnownWriteTime": 1707863750,
+    "lastKnownWriteTime": 1708552191,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1707863750620,
+    "last_content_update": 1708552191830,
     "read_only": false,
     "read_only_alternatives": []
 }

@@ -172,16 +172,8 @@ dd$PROJECT <- paste('["',dd$PROJECT,'"]')
 dd$PROJECT <- gsub(" ","",dd$PROJECT)
 dd$PACKAGE_ID <- gsub(" ","",dd$PACKAGE_ID)
 
-# Add Publication Date
-for (i in 1:nrow(deployDetails)) {
-  deployDate <- deployDetails$Date..UTC[i]
-  
-  pubDate <- deployDate %m+% years(2)
-  
-  pubDate <- as.character(pubDate)
-  
-  dd$PUBLICATION_DATE[i] <- pubDate
-}
+# Add Publication Date (this can be any date after deployment because these are data products)
+dd$PUBLICATION_DATE <- '2024-03-01'
 
 # Add site alias
 for (i in 1:nrow(deployDetails)) {
@@ -190,6 +182,7 @@ for (i in 1:nrow(deployDetails)) {
 
 # Dataset Description
 dd$PURPOSE <- 'ADRIFT in the California Current uses passive acoustic drifting buoys to study ocean sound in the California Current Ecosystem. The relatively low-cost buoys can be deployed and recovered from most vessels, including: research, fishing, and tourist boats. They drift autonomously and can be monitored shoreside via a satellite messenger. Data collected through the ADRIFT project will be used to assess noise levels and seasonal marine mammal acoustic presence in the California Current.'
+
 dd$ABSTRACT <- '' 
 
 # Set package destination (change to appropriate file path)  
@@ -310,7 +303,7 @@ dd$DEPLOYMENT_DETAILS[i] <- toJSON(newDdList)
 }
 ```
 
-## IN PROGRESS - Calibration info column
+## Calibration info column
 
 ```{r}
 for(i in 1:nrow(dd)) {
@@ -320,7 +313,7 @@ for(i in 1:nrow(dd)) {
     'SENSITIVITY' = '',
     'FREQUENCY' = '',
     'GAIN' = '',
-    'COMMENT' = ''
+    'COMMENT' = 'These sound level metrics were calculated from multiple Soundtraps (model 4300 and 640) with HTI-92WB hydrophones, each with its own unique sensitivity and frequency range. For the detailed calibration information refer to the SoundLevelMetrics_CalibrationInfo.csv spreadsheet.'
     )
 dd$CALIBRATION_INFO[i] <- toJSON(newCalList)
 }
@@ -344,18 +337,18 @@ for(i in 1:nrow(dd)) {
     'RECOVERY_TIME' = ,
     'AUDIO_START' = posixToText(deployDetails$Data_Start[i]),
     'AUDIO_END' = posixToText(deployDetails$Data_End[i]),
-    'SOURCE_PATH' =  paste('G:/Soundscape Metrics/Data/Manipulated',deployDetails$Data_ID[i], sep = ""),
-    'DATA_FILES' = paste('G:/Soundscape Metrics/Data/Manipulated',deployDetails$Data_ID[i], sep = ""),
-    'ANALYSIS_TIME_ZONE' = '-8',
+    'SOURCE_PATH' =  paste('G:/Soundscape Metrics/Data/Manipulated/Metrics/BB Metrics',deployDetails$Data_ID[i], sep = ""),
+    'DATA_FILES' = paste('G:/Soundscape Metrics/Data/Manipulated/Metrics/BB Metrics',deployDetails$Data_ID[i], sep = ""),
+    'ANALYSIS_TIME_ZONE' = '',
     'ANALYSIS_EFFORT' = '3600',
-    'MIN_ANALYSIS_FREQUENCY' = '100',
-    'MAX_ANALYSIS_FREQUENCY' = '2400',
+    'MIN_ANALYSIS_FREQUENCY' = '100', # constant
+    'MAX_ANALYSIS_FREQUENCY' = '2400', # constant
     'ANALYSIS_SAMPLE_RATE' = '19200',
     'SOFTWARE_NAME' = 'Triton-MATLAB',
     'SOFTWARE_VERSION' = 'triton1.93.20160524',
     'PROTOCOL_REFERENCE' = 'citation of citation DOI',
-    'PROCESSING_STATEMENT' = 'Enter a description of the process that was conducted to obtain the\nsound levels.',
-    'SOFTWARE_STATEMENT' = 'Write a description of the software used to create the sound levels',
+    'PROCESSING_STATEMENT' = 'The process to obtain these sound level metrics closely follows SanctSound protocols (https://sanctsound.ioos.us/). Triton software was used to decimate data to 48kHz and create long-term spectral averages (LTSAs) with a 1 Hz, 1 second resolution. These LTSAs were used to calculate sound levels in 2 minute windows from 100-24000 Hz. Median (50th percentile), mean, and various statistical sound levels (1st, 5th, 10th,25th, 75th, 90th, 95th percentiles) are calculated for each metric. For detailed methods, see our Soundscape analysis methods here https://sael-swfsc.github.io/adrift-analysis-methods/content/Soundscapes/Metrics.html.',
+    'SOFTWARE_STATEMENT' = 'The Soundscape Metric Remora within the Triton Software Package was used to calculate sound level metrics (https://github.com/MarineBioAcousticsRC/Triton/tree/master/Remoras/Soundscape-Metrics).',
     'ANALYSIS_START' = '',
     'ANALYSIS_END' = ''
     )
