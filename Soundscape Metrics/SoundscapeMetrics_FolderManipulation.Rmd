@@ -12,22 +12,22 @@ This will be used to identify drift IDs
 driftID <- read.csv("~/GitHub/ADRIFT-Deployment-PassivePacker/Calibration Files/SoundLevelMetrics_CalibrationInfo.csv")
 
 # Subset nby project
-driftID <- subset(driftID, Project == "ADRIFT")
+driftID <- subset(driftID, Project == "PASCAL")
 ```
 
 # Create manipulated file directories
 ONLY RUN ONCE
 ```{r}
-dir.create(file.path('G:/Soundscape Metrics'))
-dir.create(file.path('G:/Soundscape Metrics/Data'))
-dir.create(file.path('G:/Soundscape Metrics/Data/Packaged Data'))
-dir.create(file.path('G:/Soundscape Metrics/Data/Manipulated'))
-dir.create(file.path('G:/Soundscape Metrics/Data/Manipulated/Metrics'))
-dir.create(file.path('G:/Soundscape Metrics/Data/Manipulated/Metrics/BB Metrics'))
-dir.create(file.path('G:/Soundscape Metrics/Data/Manipulated/Metrics/OL Metrics'))
-dir.create(file.path('G:/Soundscape Metrics/Data/Manipulated/Metrics/PSD Metrics'))
-dir.create(file.path('G:/Soundscape Metrics/Data/Manipulated/Metrics/TOL Metrics'))
-dir.create(file.path('G:/Soundscape Metrics/Data/Manipulated/Logs'))
+dir.create(file.path('D:/Soundscape Metrics'))
+dir.create(file.path('D:/Soundscape Metrics/Data'))
+dir.create(file.path('D:/Soundscape Metrics/Packaged Data'))
+dir.create(file.path('D:/Soundscape Metrics/Data/Manipulated'))
+dir.create(file.path('D:/Soundscape Metrics/Data/Manipulated/Metrics'))
+dir.create(file.path('D:/Soundscape Metrics/Data/Manipulated/Metrics/BB Metrics'))
+dir.create(file.path('D:/Soundscape Metrics/Data/Manipulated/Metrics/OL Metrics'))
+dir.create(file.path('D:/Soundscape Metrics/Data/Manipulated/Metrics/PSD Metrics'))
+dir.create(file.path('D:/Soundscape Metrics/Data/Manipulated/Metrics/TOL Metrics'))
+dir.create(file.path('D:/Soundscape Metrics/Data/Manipulated/Logs'))
 ```
 
 # Copy Log files
@@ -41,11 +41,11 @@ pb <- txtProgressBar(min = 0,
 
 for (i in 1:nrow(driftID)) {
   # List of files I want to move
-  currentLogs <- list.files(paste('G:/Soundscape Metrics/Data/RAW from DON/metrics/', driftID$DeploymentID[i], sep = ""), pattern = "\\.txt$", full.names = T)
+  currentLogs <- list.files(paste('D:/Soundscape Metrics/Data/RAW from DON/metrics/', driftID$DeploymentID[i], sep = ""), pattern = "\\.txt$", full.names = T)
   
   # Create directory to move files to
-  dir.create(file.path(paste('G:/Soundscape Metrics/Data/Manipulated/Logs/',driftID$DeploymentID[i], sep = "")))
-  newLogs <- file.path(paste('G:/Soundscape Metrics/Data/Manipulated/Logs/',driftID$DeploymentID[i], sep = ""))
+  dir.create(file.path(paste('D:/Soundscape Metrics/Data/Manipulated/Logs/',driftID$DeploymentID[i], sep = "")))
+  newLogs <- file.path(paste('D:/Soundscape Metrics/Data/Manipulated/Logs/',driftID$DeploymentID[i], sep = ""))
   
   # Copy list of files to new directory
   file.copy(currentLogs, newLogs)
@@ -68,11 +68,11 @@ pb <- txtProgressBar(min = 0,
 
 for (i in 1:nrow(driftID)) {
   # List of files I want to move
-  currentBBMetrics <- list.files(paste('G:/Soundscape Metrics/Data/RAW from DON/metrics/', driftID$DeploymentID[i], sep = ""), pattern = "BB.*\\.csv$", full.names = T)
+  currentBBMetrics <- list.files(paste('D:/Soundscape Metrics/Data/RAW from DON/metrics/', driftID$DeploymentID[i], sep = ""), pattern = "BB.*\\.csv$", full.names = T)
   
   # Create directory to move files to
-  dir.create(file.path(paste('G:/Soundscape Metrics/Data/Manipulated/Metrics/BB Metrics/',driftID$DeploymentID[i], sep = "")))
-  newBBMetrics <- file.path(paste('G:/Soundscape Metrics/Data/Manipulated/Metrics/BB Metrics/',driftID$DeploymentID[i], sep = ""))
+  dir.create(file.path(paste('D:/Soundscape Metrics/Data/Manipulated/Metrics/BB Metrics/',driftID$DeploymentID[i], sep = "")))
+  newBBMetrics <- file.path(paste('D:/Soundscape Metrics/Data/Manipulated/Metrics/BB Metrics/',driftID$DeploymentID[i], sep = ""))
   
   # Copy list of files to new directory
   file.copy(currentBBMetrics, newBBMetrics)
@@ -95,11 +95,11 @@ pb <- txtProgressBar(min = 0,
 
 for (i in 1:nrow(driftID)) {
   # List of files I want to move
-  currentPSDMetrics <- list.files(paste('G:/Soundscape Metrics/Data/RAW from DON/metrics/', driftID$DeploymentID[i], sep = ""), pattern = "PSD.*\\.csv$", full.names = T)
+  currentPSDMetrics <- list.files(paste('D:/Soundscape Metrics/Data/RAW from DON/metrics/', driftID$DeploymentID[i], sep = ""), pattern = "PSD.*\\.csv$", full.names = T)
   
   # Create directory to move files to
-  dir.create(file.path(paste('G:/Soundscape Metrics/Data/Manipulated/Metrics/PSD Metrics/',driftID$DeploymentID[i], sep = "")))
-  newPSDMetrics <- file.path(paste('G:/Soundscape Metrics/Data/Manipulated/Metrics/PSD Metrics/',driftID$DeploymentID[i], sep = ""))
+  dir.create(file.path(paste('D:/Soundscape Metrics/Data/Manipulated/Metrics/PSD Metrics/',driftID$DeploymentID[i], sep = "")))
+  newPSDMetrics <- file.path(paste('D:/Soundscape Metrics/Data/Manipulated/Metrics/PSD Metrics/',driftID$DeploymentID[i], sep = ""))
   
   # Copy list of files to new directory
   file.copy(currentPSDMetrics, newPSDMetrics)
@@ -122,11 +122,11 @@ pb <- txtProgressBar(min = 0,
 
 for (i in 1:nrow(driftID)) {
   # List of files I want to move
-  currentOLMetrics <- list.files(paste('G:/Soundscape Metrics/Data/RAW from DON/metrics/', driftID$DeploymentID[i], sep = ""), pattern = "OL.*\\.csv$", full.names = T)
+  currentOLMetrics <- list.files(paste('D:/Soundscape Metrics/Data/RAW from DON/metrics/', driftID$DeploymentID[i], sep = ""), pattern = "OL.*\\.csv$", full.names = T)
   
   # Create directory to move files to
-  dir.create(file.path(paste('G:/Soundscape Metrics/Data/Manipulated/Metrics/OL Metrics/',driftID$DeploymentID[i], sep = "")))
-  newOLMetrics <- file.path(paste('G:/Soundscape Metrics/Data/Manipulated/Metrics/OL Metrics/',driftID$DeploymentID[i], sep = ""))
+  dir.create(file.path(paste('D:/Soundscape Metrics/Data/Manipulated/Metrics/OL Metrics/',driftID$DeploymentID[i], sep = "")))
+  newOLMetrics <- file.path(paste('D:/Soundscape Metrics/Data/Manipulated/Metrics/OL Metrics/',driftID$DeploymentID[i], sep = ""))
   
   # Copy list of files to new directory
   file.copy(currentOLMetrics, newOLMetrics)
@@ -149,11 +149,11 @@ pb <- txtProgressBar(min = 0,
 
 for (i in 1:nrow(driftID)) {
   # List of files I want to move
-  currentTOLMetrics <- list.files(paste('G:/Soundscape Metrics/Data/RAW from DON/metrics/', driftID$DeploymentID[i], sep = ""), pattern = "TOL.*\\.csv$", full.names = T)
+  currentTOLMetrics <- list.files(paste('D:/Soundscape Metrics/Data/RAW from DON/metrics/', driftID$DeploymentID[i], sep = ""), pattern = "TOL.*\\.csv$", full.names = T)
   
   # Create directory to move files to
-  dir.create(file.path(paste('G:/Soundscape Metrics/Data/Manipulated/Metrics/TOL Metrics/',driftID$DeploymentID[i], sep = "")))
-  newTOLMetrics <- file.path(paste('G:/Soundscape Metrics/Data/Manipulated/Metrics/TOL Metrics/',driftID$DeploymentID[i], sep = ""))
+  dir.create(file.path(paste('D:/Soundscape Metrics/Data/Manipulated/Metrics/TOL Metrics/',driftID$DeploymentID[i], sep = "")))
+  newTOLMetrics <- file.path(paste('D:/Soundscape Metrics/Data/Manipulated/Metrics/TOL Metrics/',driftID$DeploymentID[i], sep = ""))
   
   # Copy list of files to new directory
   file.copy(currentTOLMetrics, newTOLMetrics)

@@ -12,13 +12,13 @@
     "properties": {
         "expression": "driftID",
         "caption": "driftID",
-        "totalObservations": "96",
-        "displayedObservations": "96",
+        "totalObservations": "17",
+        "displayedObservations": "17",
         "variables": "7",
-        "cacheKey": "3E9EBBFF",
+        "cacheKey": "38B62FA9",
         "object": "driftID",
         "environment": "",
-        "contentUrl": "grid_resource/gridviewer.html?env=&obj=driftID&cache_key=3E9EBBFF&max_cols=50",
+        "contentUrl": "grid_resource/gridviewer.html?env=&obj=driftID&cache_key=38B62FA9&max_cols=50",
         "preview": "0",
         "source_window_id": "",
         "Source": "Source"
