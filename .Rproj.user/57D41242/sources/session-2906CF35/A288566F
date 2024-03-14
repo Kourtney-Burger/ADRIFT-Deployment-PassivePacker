@@ -1,0 +1,31 @@
+{
+    "id": "A288566F",
+    "path": "~/GitHub/ADRIFT-Deployment-PassivePacker/ADRIFT_Working_Scripts/ADRIFT_PassivePacker_Deployment.Rmd",
+    "project_path": "ADRIFT_Working_Scripts/ADRIFT_PassivePacker_Deployment.Rmd",
+    "type": "r_markdown",
+    "hash": "3551641685",
+    "contents": "",
+    "dirty": false,
+    "created": 1707773283571.0,
+    "source_on_save": false,
+    "relative_order": 4,
+    "properties": {
+        "source_window_id": "",
+        "Source": "Source0e1505j3looz",
+        "cursorPosition": "34,0",
+        "scrollLine": "20",
+        "rmdVisualMode": "false",
+        "rmdVisualWrapConfigured": "true",
+        "docOutlineVisible": "0",
+        "rmdVisualModeLocation": "1176:1121.111083984375",
+        "rmdVisualCollapsedChunks": ""
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1706926866,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1706926866,
+    "read_only": false,
+    "read_only_alternatives": []
+}
