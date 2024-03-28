@@ -1,0 +1,17 @@
+"0","  #Noise logs
+    # List of files I want to move
+    currentNoise <- list.files(paste('Z:/RECORDINGS/DRIFTERS/ADRIFT/500Hz/', 
+                                     deployDetails$Data_ID[i], '_500Hz', sep = """"),
+                               pattern = ""\\_Noise_Log.xls"", full.names = T)
+    # Create folder/directory to move the list above to
+    dir.create(file.path(paste('G:/ADRIFT_RawData/manipulated/metadata/',
+                               deployDetails$Data_ID[i], '/NoiseLogs', sep = """")))
+    newNoise <- file.path(paste('G:/ADRIFT_RawData/manipulated/metadata/',
+                               deployDetails$Data_ID[i], '/NoiseLogs', sep = """"))
+    # Copy list of files to new directory 
+    file.copy(currentNoise, newNoise)
+"
+"1","[1]"
+"1"," TRUE"
+"1","
+"

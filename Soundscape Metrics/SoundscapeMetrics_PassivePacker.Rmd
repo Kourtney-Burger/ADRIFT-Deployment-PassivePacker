@@ -425,7 +425,7 @@ for(i in 1:nrow(dd)) {
 #  for (i in 64) {
     newAncilList <- list(
     'BIO_PATH' = "",
-    'OTHER_PATH' = "",
+    'OTHER_PATH' = paste('G:/ADRIFT_RawData/manipulated/metadata/',deployDetails$Data_ID[i],'/NoiseLogs', sep = ""), #noise logs G:\ADRIFT_RawData\manipulated\metadata\ADRIFT_001\NoiseLogs
     'TEMP_PATH' = ""
   )
 

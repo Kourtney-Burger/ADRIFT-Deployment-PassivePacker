@@ -45,7 +45,6 @@ for (i in 1:nrow(deployDetails)) {
   # Copy list of files to new directory 
   file.copy(currentAudio, newAudio)
   
-  # Sets the progress bar to the current state
   setTxtProgressBar(pb, i)
 }
 

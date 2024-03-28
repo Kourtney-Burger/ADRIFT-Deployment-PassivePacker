@@ -2,7 +2,7 @@
 "0","#  for (i in 64) {"
 "0","    newAncilList <- list("
 "0","    'BIO_PATH' = """","
-"0","    'OTHER_PATH' = """","
+"0","    'OTHER_PATH' = paste('G:/ADRIFT_RawData/manipulated/metadata/',deployDetails$Data_ID[i],'/NoiseLogs', sep = """"), #noise logs G:\ADRIFT_RawData\manipulated\metadata\ADRIFT_001\NoiseLogs"
 "0","    'TEMP_PATH' = """""
 "0","  )"
 "0",""
