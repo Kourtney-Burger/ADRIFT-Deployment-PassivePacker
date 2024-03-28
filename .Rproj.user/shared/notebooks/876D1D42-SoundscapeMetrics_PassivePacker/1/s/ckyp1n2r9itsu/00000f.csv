@@ -12,4 +12,4 @@
 "0","deployDetails <- subset(deployDetails, Type != c('SM2Bat','SM3M'))"
 "0",""
 "0","# Remove any additional drifts that did not have sound level metrics calculated"
-"0","# deployDetails <- deployDetails[-c(), ]"
+"0","deployDetails <- deployDetails[-c(2, 10, 15, 29, 35, 47, 50, 54, 62), ]"

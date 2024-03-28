@@ -1,1 +1,4 @@
 "0","deployDetails <- read.csv(here(""DeploymentDetailsFiles"",""ADRIFT_DeploymentDetails.csv""))"
+"0",""
+"0","# Read in additional metadata summarized from Soundscape metrics logs"
+"0","SumMetadata <- read.csv(""Adrift Data Summaries.csv"")"

@@ -1,4 +1,0 @@
-"0","# Change soundtrap names"
-"0","deployDetails[deployDetails == ""ST4300""] <- ""SoundTrap 4300"""
-"0","deployDetails[deployDetails == ""SM3M""] <- ""Song Meter SM3M"""
-"0","deployDetails[deployDetails == ""SM2Bat""] <- ""Song Meter SM2+"""
