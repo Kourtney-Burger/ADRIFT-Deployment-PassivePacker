@@ -1,0 +1,4 @@
+"0","# Import Passive Packer data table "
+"0","db <- dbConnect(SQLite(), here('PassivePacker_v.4.0.3-win64/database/packageData.sqlite'))"
+"0","ppdt <- dbReadTable(db, ""DEPLOYMENT_DATA"")"
+"0","dbDisconnect(db)"

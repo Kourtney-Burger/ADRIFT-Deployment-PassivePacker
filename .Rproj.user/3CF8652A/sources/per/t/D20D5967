@@ -1,0 +1,26 @@
+{
+    "id": "D20D5967",
+    "path": "~/GitHub/ADRIFT-Deployment-PassivePacker/ADRIFT_Working_Scripts/ADRIFTDataFolderManipulation.Rmd",
+    "project_path": "ADRIFT_Working_Scripts/ADRIFTDataFolderManipulation.Rmd",
+    "type": "r_markdown",
+    "hash": "995306065",
+    "contents": "",
+    "dirty": false,
+    "created": 1715275583931.0,
+    "source_on_save": false,
+    "relative_order": 5,
+    "properties": {
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "181,34",
+        "scrollLine": "23"
+    },
+    "folds": "25|48|55|0|\n57|20|88|0|\n89|28|165|0|\n91|6|164|0|\n",
+    "lastKnownWriteTime": 1718726497,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1718726497058,
+    "read_only": false,
+    "read_only_alternatives": []
+}
