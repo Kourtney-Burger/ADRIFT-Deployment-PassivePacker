@@ -1,0 +1,25 @@
+"0","#dir.create(file.path('E:/PASCAL_RawData'))"
+"0","dir.create(file.path('E:/PASCAL_RawData/manipulated'))"
+"2","Warning in dir.create(file.path(""E:/PASCAL_RawData/manipulated"")) :"
+"2","
+ "
+"2"," 'E:\PASCAL_RawData\manipulated' already exists
+"
+"0","dir.create(file.path('E:/PASCAL_RawData/manipulated/audio'))"
+"2","Warning in dir.create(file.path(""E:/PASCAL_RawData/manipulated/audio"")) :"
+"2","
+ "
+"2"," 'E:\PASCAL_RawData\manipulated\audio' already exists
+"
+"0","dir.create(file.path('E:/PASCAL_RawData/manipulated/temp'))"
+"2","Warning in dir.create(file.path(""E:/PASCAL_RawData/manipulated/temp"")) :"
+"2","
+ "
+"2"," 'E:\PASCAL_RawData\manipulated\temp' already exists
+"
+"0","dir.create(file.path('E:/PASCAL_RawData/manipulated/metadata'))"
+"2","Warning in dir.create(file.path(""E:/PASCAL_RawData/manipulated/metadata"")) :"
+"2","
+ "
+"2"," 'E:\PASCAL_RawData\manipulated\metadata' already exists
+"

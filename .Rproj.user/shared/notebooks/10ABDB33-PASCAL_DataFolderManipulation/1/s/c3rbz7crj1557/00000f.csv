@@ -1,0 +1,4 @@
+"0","deployDetails <- subset(deployDetails, cruise == 'PASCAL')
+"
+"2","Error in eval(e, x, parent.frame()) : object 'cruise' not found
+"
