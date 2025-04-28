@@ -266,15 +266,15 @@ for(i in 1:nrow(dd)) {
 }        
 
 
-# Comment once working        
-# Copy text from database 
-# sdText <- '{"1": {"channel_start": "2023-10-05T23:29:58", "channel_end": "2023-10-06T23:23:58", "sensor": "1", "sampling details": [{"type": "sample_rate_widget", "value_1": "384", "value_2": "16", "checked": false, "start": "2023-10-05T23:29:58", "end": "2023-10-06T23:23:58"}, {"type": "duty_cycle_widget", "value_1": "6", "value_2": "6", "checked": false, "start": "2023-10-05T23:29:58", "end": "2023-10-06T23:23:58"}]}, "2": {"channel_start": "2023-10-05T23:29:58", "channel_end": "2023-10-06T23:23:58", "sensor": "2", "sampling details": [{"type": "sample_rate_widget", "value_1": "384", "value_2": "16", "checked": false, "start": "2023-10-05T23:29:58", "end": "2023-10-06T23:23:58"}, {"type": "duty_cycle_widget", "value_1": "6", "value_2": "6", "checked": false, "start": "2023-10-05T23:29:58", "end": "2023-10-06T23:23:58"}]}}'
-# sdList <- fromJSON(sdText)
-# cat(toJSON(newSdList))
-# cat(toJSON(sdList))
-# view(newSdList)
-# View(sdList) 
-#  identical(newSdList,sdList)
+# Comment once working
+# Copy text from database
+sdText <- '{"1": {"channel_start": "2023-10-05T23:29:58", "channel_end": "2023-10-06T23:23:58", "sensor": "1", "sampling details": [{"type": "sample_rate_widget", "value_1": "384", "value_2": "16", "checked": false, "start": "2023-10-05T23:29:58", "end": "2023-10-06T23:23:58"}, {"type": "duty_cycle_widget", "value_1": "6", "value_2": "6", "checked": false, "start": "2023-10-05T23:29:58", "end": "2023-10-06T23:23:58"}]}, "2": {"channel_start": "2023-10-05T23:29:58", "channel_end": "2023-10-06T23:23:58", "sensor": "2", "sampling details": [{"type": "sample_rate_widget", "value_1": "384", "value_2": "16", "checked": false, "start": "2023-10-05T23:29:58", "end": "2023-10-06T23:23:58"}, {"type": "duty_cycle_widget", "value_1": "6", "value_2": "6", "checked": false, "start": "2023-10-05T23:29:58", "end": "2023-10-06T23:23:58"}]}}'
+sdList <- fromJSON(sdText)
+cat(toJSON(newSdList))
+cat(toJSON(sdList))
+view(newSdList)
+View(sdList)
+ identical(newSdList,sdList)
 ```
 
 ## Quality Details Column
